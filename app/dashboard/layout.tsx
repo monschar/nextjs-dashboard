@@ -1,8 +1,10 @@
 import SideNav from "@/app/ui/dashboard/sidenav";
+import { Spinner } from "../ui/dashboard/spinner";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
+      <Spinner show={false} />
       <div className="w-full flex-none md:w-64">
         <SideNav />
       </div>

@@ -25,10 +25,9 @@ export default async function IngredientsTable({
         </div>
       </td>
       <td className="whitespace-nowrap px-3 py-3">
-        {" "}
         {formatCurrency(item.price)}
       </td>
-      <td className="whitespace-nowrap px-3 py-3">{item.tag}</td>
+      <td className="whitespace-nowrap px-3 py-3">{item.stock}</td>
       <td className="whitespace-nowrap py-3 pl-6 pr-3">
         <div className="flex justify-end gap-3">
           <UpdateItemButton
@@ -56,7 +55,7 @@ export default async function IngredientsTable({
       <div className="flex w-full items-center justify-between pt-4">
         <div>
           <p className="text-xl font-medium">{formatCurrency(item.price)}</p>
-          <p>{item.tag}</p>
+          <p>{item.stock}</p>
         </div>
         <div className="flex justify-end gap-2">
           <UpdateItemButton
@@ -91,7 +90,7 @@ export default async function IngredientsTable({
                   Price
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
-                  Tag
+                  Stock
                 </th>
                 <th scope="col" className="relative py-3 pl-6 pr-3">
                   <span className="sr-only">Edit</span>

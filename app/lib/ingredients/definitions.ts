@@ -5,6 +5,7 @@ export type Invoice = {
   price: number;
   tag: string;
   image_url: string;
+  stock: number;
 };
 
 export type IngredientsTable = {
@@ -14,6 +15,7 @@ export type IngredientsTable = {
   date: string;
   tag: string;
   image_url: string;
+  stock: number;
 };
 
 export type IngredientForm = {
@@ -22,4 +24,5 @@ export type IngredientForm = {
   price: number;
   tag: string;
   image_url: string;
+  stock: number;
 };

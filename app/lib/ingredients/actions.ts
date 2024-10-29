@@ -14,6 +14,7 @@ const FormSchema = z.object({
   date: z.string(),
   tag: z.string(),
   imageUrl: z.string(),
+  stock: z.coerce.number(),
 });
 
 const CreateIngredient = FormSchema.omit({ id: true, date: true });
@@ -25,6 +26,7 @@ export async function createIngredient(formData: FormData) {
     price: formData.get("price"),
     tag: formData.get("tag"),
     imageUrl: formData.get("image-url"),
+    stock: formData.get("stock"),
   });
 
   if (!validatedFields.success) {
@@ -34,13 +36,13 @@ export async function createIngredient(formData: FormData) {
     };
   }
 
-  const { name, price, tag, imageUrl } = validatedFields.data;
+  const { name, price, tag, imageUrl, stock } = validatedFields.data;
   const date = new Date().toISOString().split("T")[0];
 
   try {
     await sql`
-        INSERT INTO ingredients (name, price, tag, image_url, date)
-        VALUES (${name},${price},${tag}, ${imageUrl}, ${date})
+        INSERT INTO ingredients (name, price, tag, image_url, date, stock)
+        VALUES (${name},${price},${tag}, ${imageUrl}, ${date}, ${stock})
       `;
   } catch (error) {
     return {
@@ -54,17 +56,18 @@ export async function createIngredient(formData: FormData) {
 }
 
 export async function updateIngredient(id: string, formData: FormData) {
-  const { name, price, tag, imageUrl } = UpdateIngredient.parse({
+  const { name, price, tag, imageUrl, stock } = UpdateIngredient.parse({
     name: formData.get("name"),
     price: formData.get("price"),
     tag: formData.get("tag"),
     imageUrl: formData.get("image-url"),
+    stock: formData.get("stock"),
   });
 
   try {
     await sql`
           UPDATE ingredients
-          SET name = ${name}, price = ${price}, tag = ${tag}, image_url = ${imageUrl}
+          SET name = ${name}, price = ${price}, tag = ${tag}, image_url = ${imageUrl}, stock = ${stock}
           WHERE id = ${id}
         `;
   } catch (error) {
