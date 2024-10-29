@@ -1,4 +1,4 @@
-export const ITEMS_PER_PAGE = 6;
+export const ITEMS_PER_PAGE = 100;
 
 export const DASHBOARD_PAGES = {
   INVOICES: {

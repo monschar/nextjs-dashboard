@@ -50,7 +50,7 @@ export async function fetchFilteredIngredients(
         ingredients.name ILIKE ${`%${query}%`} OR
         ingredients.tag ILIKE ${`%${query}%`} OR
         ingredients.date::text ILIKE ${`%${query}%`}
-      ORDER BY ingredients.name DESC
+      ORDER BY ingredients.name ASC
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `;
 
