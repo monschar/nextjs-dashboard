@@ -1,23 +1,34 @@
 import { PencilIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { deleteItemLevel } from "@/app/lib/itemLevels/actions";
 
-export function CreateItemLevel() {
+export function CreateItemButton({
+  buttonText,
+  parentUrl,
+}: {
+  buttonText: string;
+  parentUrl: string;
+}) {
   return (
     <Link
-      href="/dashboard/item-levels/create"
+      href={`/dashboard/${parentUrl}/create`}
       className="flex h-10 items-center rounded-lg bg-blue-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
     >
-      <span className="hidden md:block">Create Item Level</span>{" "}
+      <span className="hidden md:block">{buttonText}</span>{" "}
       <PlusIcon className="h-5 md:ml-4" />
     </Link>
   );
 }
 
-export function UpdateItemLevel({ id }: { id: string }) {
+export function UpdateItemButton({
+  id,
+  parentUrl,
+}: {
+  id: string;
+  parentUrl: string;
+}) {
   return (
     <Link
-      href={`/dashboard/item-levels/${id}/edit`}
+      href={`/dashboard/${parentUrl}/${id}/edit`}
       className="rounded-md border p-2 hover:bg-gray-100"
     >
       <PencilIcon className="w-5" />
@@ -25,10 +36,16 @@ export function UpdateItemLevel({ id }: { id: string }) {
   );
 }
 
-export function DeleteItemLevel({ id }: { id: string }) {
-  const deleteItemLevelWithId = deleteItemLevel.bind(null, id);
+export function DeleteItemButton({
+  id,
+  onDelete,
+}: {
+  id: string;
+  onDelete: (id: string) => Promise<unknown>;
+}) {
+  const onDeleteWithId = onDelete.bind(null, id);
   return (
-    <form action={deleteItemLevelWithId}>
+    <form action={onDeleteWithId}>
       <button className="rounded-md border p-2 hover:bg-gray-100">
         <span className="sr-only">Delete</span>
         <TrashIcon className="w-5" />

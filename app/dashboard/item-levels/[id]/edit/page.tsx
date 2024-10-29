@@ -1,5 +1,5 @@
 import Form from "@/app/ui/itemLevels/edit-form";
-import Breadcrumbs from "@/app/ui/invoices/breadcrumbs";
+import Breadcrumbs from "@/app/ui/dashboard/breadcrumbs";
 import { fetchItemLevelById } from "@/app/lib/itemLevels/data";
 import { notFound } from "next/navigation";
 

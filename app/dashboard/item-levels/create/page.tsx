@@ -1,5 +1,5 @@
 import Form from "@/app/ui/itemLevels/create-form";
-import Breadcrumbs from "@/app/ui/invoices/breadcrumbs";
+import Breadcrumbs from "@/app/ui/dashboard/breadcrumbs";
 
 export default async function Page() {
   return (
@@ -8,7 +8,7 @@ export default async function Page() {
         breadcrumbs={[
           { label: "Item Levels", href: "/dashboard/item-levels" },
           {
-            label: "Create Invoice",
+            label: "Create Item Level",
             href: "/dashboard/item-levels/create",
             active: true,
           },
