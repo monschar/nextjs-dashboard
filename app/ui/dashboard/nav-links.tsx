@@ -5,10 +5,12 @@ import {
   HomeIcon,
   DocumentDuplicateIcon,
   ChevronDoubleUpIcon,
+  BugAntIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
+import { DASHBOARD_PAGES } from "@/app/lib/consts";
 
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
@@ -24,6 +26,11 @@ const links = [
     name: "Item Levels",
     href: "/dashboard/item-levels",
     icon: ChevronDoubleUpIcon,
+  },
+  {
+    name: DASHBOARD_PAGES.INGREDIENTS.NAME,
+    href: `/dashboard/${DASHBOARD_PAGES.INGREDIENTS.PATH}`,
+    icon: BugAntIcon,
   },
 ];
 

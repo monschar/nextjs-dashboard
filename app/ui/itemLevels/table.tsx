@@ -28,7 +28,7 @@ export default async function ItemLevelsTable({
       </td>
       <td className="whitespace-nowrap py-3 pl-6 pr-3">
         <div className="flex justify-end gap-3">
-          <UpdateItemButton id={item.id} parentUrl="item-levels" />
+          <UpdateItemButton id={item.id} parentPath="item-levels" />
           <DeleteItemButton
             id={item.id}
             onDelete={deleteItemLevel.bind(null, item.id)}
@@ -52,7 +52,7 @@ export default async function ItemLevelsTable({
           <p>{formatDateToLocal(item.date)}</p>
         </div>
         <div className="flex justify-end gap-2">
-          <UpdateItemButton id={item.id} parentUrl="item-levels" />
+          <UpdateItemButton id={item.id} parentPath="item-levels" />
           <DeleteItemButton
             id={item.id}
             onDelete={deleteItemLevel.bind(null, item.id)}

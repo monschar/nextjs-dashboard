@@ -1,6 +1,6 @@
 import { sql } from "@vercel/postgres";
 import { ItemLevelForm, ItemLevelsTable } from "./definitions";
-const ITEMS_PER_PAGE = 6;
+import { ITEMS_PER_PAGE } from "../consts";
 
 export async function fetchItemLevelsPages(query: string) {
   try {
@@ -14,16 +14,14 @@ export async function fetchItemLevelsPages(query: string) {
     return totalPages;
   } catch (error) {
     console.error("Database Error:", error);
-    throw new Error("Failed to fetch total number of item levels.");
+    throw new Error("Failed to fetch total number of Item Levels.");
   }
 }
 
 export async function fetchItemLevelById(id: string) {
   try {
     const data = await sql<ItemLevelForm>`
-        SELECT
-          item_levels.id,
-          item_levels.name
+        SELECT *
         FROM item_levels
         WHERE item_levels.id = ${id};
       `;
@@ -33,7 +31,7 @@ export async function fetchItemLevelById(id: string) {
     return itemLevels[0];
   } catch (error) {
     console.error("Database Error:", error);
-    throw new Error("Failed to fetch item levels.");
+    throw new Error("Failed to fetch Item Levels.");
   }
 }
 
@@ -45,10 +43,7 @@ export async function fetchFilteredItemLevels(
 
   try {
     const itemLevels = await sql<ItemLevelsTable>`
-      SELECT
-        item_levels.id,
-        item_levels.date,
-        item_levels.name
+      SELECT *
       FROM item_levels
       WHERE
         item_levels.name ILIKE ${`%${query}%`} OR
@@ -60,6 +55,6 @@ export async function fetchFilteredItemLevels(
     return itemLevels.rows;
   } catch (error) {
     console.error("Database Error:", error);
-    throw new Error("Failed to fetch item levels.");
+    throw new Error("Failed to fetch Item Levels.");
   }
 }

@@ -1,8 +1,7 @@
 import { sql } from "@vercel/postgres";
 import { InvoiceForm, InvoicesTable, LatestInvoiceRaw } from "./definitions";
 import { formatCurrency } from "../utils";
-
-const ITEMS_PER_PAGE = 6;
+import { ITEMS_PER_PAGE } from "../consts";
 
 export async function fetchLatestInvoices() {
   try {
