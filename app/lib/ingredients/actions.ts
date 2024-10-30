@@ -8,9 +8,7 @@ import { redirect } from "next/navigation";
 const FormSchema = z.object({
   id: z.string(),
   name: z.string(),
-  price: z.coerce
-    .number()
-    .gt(0, { message: "Please enter an amount greater than $0." }),
+  price: z.coerce.number(),
   date: z.string(),
   tag: z.string(),
   imageUrl: z.string(),

@@ -20,3 +20,8 @@ export const DASHBOARD_PAGES = {
     TABLE: "ingredients",
   },
 };
+
+export enum FormActionType {
+  Create,
+  Edit,
+}

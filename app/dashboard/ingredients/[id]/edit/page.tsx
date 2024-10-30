@@ -1,8 +1,8 @@
-import Form from "@/app/ui/ingredients/edit-form";
+import Form from "@/app/ui/ingredients/form";
 import Breadcrumbs from "@/app/ui/dashboard/breadcrumbs";
 import { fetchIngredientById } from "@/app/lib/ingredients/data";
 import { notFound } from "next/navigation";
-import { DASHBOARD_PAGES } from "@/app/lib/consts";
+import { DASHBOARD_PAGES, FormActionType } from "@/app/lib/consts";
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -27,7 +27,7 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           },
         ]}
       />
-      <Form ingredient={ingredient} />
+      <Form formProps={{ formActionType: FormActionType.Edit, ingredient }} />
     </main>
   );
 }

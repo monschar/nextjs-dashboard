@@ -1,6 +1,6 @@
-import Form from "@/app/ui/ingredients/create-form";
+import Form from "@/app/ui/ingredients/form";
 import Breadcrumbs from "@/app/ui/dashboard/breadcrumbs";
-import { DASHBOARD_PAGES } from "@/app/lib/consts";
+import { DASHBOARD_PAGES, FormActionType } from "@/app/lib/consts";
 
 export default async function Page() {
   return (
@@ -18,7 +18,7 @@ export default async function Page() {
           },
         ]}
       />
-      <Form />
+      <Form formProps={{ formActionType: FormActionType.Create }} />
     </main>
   );
 }

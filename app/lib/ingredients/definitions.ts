@@ -1,4 +1,4 @@
-export type Invoice = {
+export type Ingredients = {
   id: string;
   name: string;
   date: string;
