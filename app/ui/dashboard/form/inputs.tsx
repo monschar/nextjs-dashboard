@@ -48,6 +48,9 @@ export const NumberInput = (inputProps: NumberInputPropsType) => {
 };
 
 export const SelectInput = (inputProps: SelectInputProsType) => {
+  const options = inputProps.options.length
+    ? inputProps.options
+    : [{ label: "N/A", value: "N/A" }];
   return (
     <div className="mb-4">
       <label htmlFor="tag" className="mb-2 block text-sm font-medium">
@@ -64,7 +67,7 @@ export const SelectInput = (inputProps: SelectInputProsType) => {
           <option value="" disabled>
             {`Select a ${inputProps.label}`}
           </option>
-          {[...inputProps.options, { label: "N/A", value: "N/A" }].map((o) => (
+          {options.map((o) => (
             <option key={o.value} value={o.value}>
               {o.label}
             </option>
@@ -73,6 +76,41 @@ export const SelectInput = (inputProps: SelectInputProsType) => {
         {inputProps.icon}
       </div>
     </div>
+  );
+};
+
+export const RadioInput = (inputProps: RadioInputProsType) => {
+  return (
+    <fieldset>
+      <legend className="mb-2 block text-sm font-medium">
+        {inputProps.label}
+      </legend>
+
+      <div className="rounded-md border border-gray-200 bg-white px-[14px] py-3">
+        <div className="flex gap-4">
+          {inputProps.options.map((o) => {
+            return (
+              <div className="flex items-center" key={o.value}>
+                <input
+                  id={o.value.toString()}
+                  name={inputProps.name}
+                  type="radio"
+                  value={o.value}
+                  defaultChecked={inputProps.defaultValue === o.value}
+                  className="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
+                />
+                <label
+                  id={o.value.toString()}
+                  className="ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600"
+                >
+                  {o.label} {o.icon}
+                </label>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </fieldset>
   );
 };
 
@@ -98,6 +136,15 @@ type NumberInputPropsType = InputPropsType & {
 type SelectInputProsType = InputPropsType & {
   defaultValue?: string | number;
   options: Array<{ label: string; value: string | number }>;
+};
+
+type RadioInputProsType = InputPropsType & {
+  defaultValue?: string | number;
+  options: Array<{
+    label: string;
+    value: string | number;
+    icon?: React.ReactElement;
+  }>;
 };
 
 export const iconClassName =

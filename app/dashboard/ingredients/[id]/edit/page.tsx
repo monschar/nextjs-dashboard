@@ -27,7 +27,12 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
           },
         ]}
       />
-      <Form formProps={{ formActionType: FormActionType.Edit, ingredient }} />
+      <Form
+        formProps={{
+          formActionType: FormActionType.Edit,
+          initialFormValues: ingredient,
+        }}
+      />
     </main>
   );
 }

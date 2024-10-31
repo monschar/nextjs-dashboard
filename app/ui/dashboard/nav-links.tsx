@@ -5,6 +5,7 @@ import {
   HomeIcon,
   DocumentDuplicateIcon,
   ChevronDoubleUpIcon,
+  CakeIcon,
   BugAntIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
@@ -31,6 +32,11 @@ const links = [
     name: DASHBOARD_PAGES.INGREDIENTS.NAME,
     href: `/dashboard/${DASHBOARD_PAGES.INGREDIENTS.PATH}`,
     icon: BugAntIcon,
+  },
+  {
+    name: DASHBOARD_PAGES.RECIPES.NAME,
+    href: `/dashboard/${DASHBOARD_PAGES.RECIPES.PATH}`,
+    icon: CakeIcon,
   },
 ];
 

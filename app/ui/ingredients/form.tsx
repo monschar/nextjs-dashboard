@@ -26,7 +26,7 @@ type CreateFormProps = {
 
 type EditFormProps = {
   formActionType: FormActionType.Edit;
-  ingredient: IngredientFormType;
+  initialFormValues: IngredientFormType;
 };
 
 const defaultValues: IngredientFormType = {
@@ -46,7 +46,7 @@ export default function IngredientForm({
   let currentFormValues = defaultValues;
   let currentFormAction = createIngredient;
   if (formProps.formActionType === FormActionType.Edit) {
-    currentFormValues = formProps.ingredient;
+    currentFormValues = formProps.initialFormValues;
     currentFormAction = updateIngredient.bind(null, currentFormValues.id);
   }
 

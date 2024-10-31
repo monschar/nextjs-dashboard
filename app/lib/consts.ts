@@ -19,6 +19,12 @@ export const DASHBOARD_PAGES = {
     SINGLE: "Ingredient",
     TABLE: "ingredients",
   },
+  RECIPES: {
+    NAME: "Recipes",
+    PATH: "recipes",
+    SINGLE: "recipe",
+    TABLE: "recipes",
+  },
 };
 
 export enum FormActionType {

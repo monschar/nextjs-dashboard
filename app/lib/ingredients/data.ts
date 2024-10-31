@@ -60,3 +60,18 @@ export async function fetchFilteredIngredients(
     throw new Error("Failed to fetch Ingredients.");
   }
 }
+
+export async function fetchAllIngredients() {
+  try {
+    const ingredients = await sql<IngredientsTable>`
+      SELECT *
+      FROM ingredients
+      ORDER BY ingredients.name ASC
+    `;
+
+    return ingredients.rows;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch Ingredients.");
+  }
+}
