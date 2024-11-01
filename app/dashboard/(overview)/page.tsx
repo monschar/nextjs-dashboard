@@ -8,23 +8,33 @@ import {
   LatestInvoicesSkeleton,
   CardsSkeleton,
 } from "@/app/ui/skeletons";
+import MegaTable from "@/app/ui/dashboard/megatable";
+import { fetchAllRecipes } from "@/app/lib/recipes/data";
 
 export default async function Page() {
+  const recipeData = await fetchAllRecipes();
   return (
     <main>
       <h1 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
         Dashboard
       </h1>
+
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <Suspense fallback={<CardsSkeleton />}>
+        {/* @ts-expect-error Server Component */}
           <CardWrapper />
         </Suspense>
       </div>
+      <div className="mt-6 w-100">
+        <MegaTable recipeData={recipeData}/>
+      </div>
       <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
         <Suspense fallback={<RevenueChartSkeleton />}>
+        {/* @ts-expect-error Server Component */}
           <RevenueChart />
         </Suspense>
         <Suspense fallback={<LatestInvoicesSkeleton />}>
+        {/* @ts-expect-error Server Component */}
           <LatestInvoices />
         </Suspense>
       </div>

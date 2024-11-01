@@ -2,6 +2,41 @@ import { sql } from "@vercel/postgres";
 import { RecipeForm, RecipesTable } from "./definitions";
 import { ITEMS_PER_PAGE } from "../consts";
 
+export async function fetchAllRecipes() {
+  try {
+    const recipes = await sql<RecipesTable>`
+      SELECT 
+          r.id AS id,
+          r.name AS name,
+          r.type AS type,
+          r.price AS price,
+          r.active AS active,
+          i1.name AS ingredient1,
+          i2.name AS ingredient2,
+          i3.name AS ingredient3,
+          i4.name AS ingredient4,
+          i5.name AS ingredient5
+      FROM 
+          recipes r
+      LEFT JOIN 
+          ingredients i1 ON r.ingredient1 = i1.id
+      LEFT JOIN 
+          ingredients i2 ON r.ingredient2 = i2.id
+      LEFT JOIN 
+          ingredients i3 ON r.ingredient3 = i3.id
+      LEFT JOIN 
+          ingredients i4 ON r.ingredient4 = i4.id
+      LEFT JOIN 
+          ingredients i5 ON r.ingredient5 = i5.id
+      ORDER BY r.name ASC
+    `;
+    return recipes.rows;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch recipes.");
+  }
+}
+
 export async function fetchFilteredRecipes(query: string, currentPage: number) {
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
   try {

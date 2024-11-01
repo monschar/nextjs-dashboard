@@ -120,3 +120,17 @@ export async function deleteRecipe(id: string) {
     console.log(error);
   }
 }
+
+export async function updateRecipeActive(id: string) {
+  try {
+    await sql`
+          UPDATE recipes
+          SET active = NOT active
+          WHERE id = ${id}
+        `;
+  } catch (error) {
+    return { message: `Database Error: Failed to Update ${NAME}.` };
+    console.log(error);
+  }
+  revalidatePath(`/dashboard`);
+}
