@@ -79,7 +79,7 @@ export const constToReadable = (str: string) => {
     .join(" ");
 };
 
-export const getOptionsFromEnum = (e: Object) => {
+export const getOptionsFromEnum = (e: object) => {
   const res = Object.values(e).map((i) => ({
     value: i,
     label: constToReadable(i),

@@ -3,7 +3,7 @@ import { DeleteItemButton, UpdateItemButton } from "../dashboard/buttons";
 import { deleteRecipe } from "@/app/lib/recipes/actions";
 import { RecipesTable as IngredientsTableType } from "@/app/lib/recipes/definitions";
 import { DASHBOARD_PAGES } from "@/app/lib/consts";
-import { formatCurrency, constToReadable } from "@/app/lib/utils";
+import { formatCurrency } from "@/app/lib/utils";
 import RecipeStatus from "./status";
 
 export default async function RecipesTable({
