@@ -41,7 +41,7 @@ export function DeleteItemButton({
   onDelete,
 }: {
   id: string;
-  onDelete: (id: string) => Promise<unknown>;
+  onDelete: (id: string) => Promise<void>;
 }) {
   const onDeleteWithId = onDelete.bind(null, id);
   return (

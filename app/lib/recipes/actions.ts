@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { DASHBOARD_PAGES } from "../consts";
 
-const { PATH, NAME } = DASHBOARD_PAGES.RECIPES;
+const { PATH } = DASHBOARD_PAGES.RECIPES;
 
 const FormSchema = z.object({
   id: z.string(),
@@ -38,10 +38,7 @@ export async function createRecipe(formData: FormData) {
   });
   if (!validatedFields.success) {
     console.log(validatedFields.error.flatten().fieldErrors);
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: `Missing Fields. Failed to Create ${NAME}.`,
-    };
+    return;
   }
 
   const {
@@ -63,9 +60,6 @@ export async function createRecipe(formData: FormData) {
       `;
   } catch (error) {
     console.log(error);
-    return {
-      message: `Database Error: Failed to Create ${NAME}.`,
-    };
   }
 
   revalidatePath(`/dashboard/${PATH}`);
@@ -102,7 +96,6 @@ export async function updateRecipe(id: string, formData: FormData) {
           WHERE id = ${id}
         `;
   } catch (error) {
-    return { message: `Database Error: Failed to Update ${NAME}.` };
     console.log(error);
   }
 
@@ -114,9 +107,7 @@ export async function deleteRecipe(id: string) {
   try {
     await sql`DELETE FROM recipes WHERE id = ${id}`;
     revalidatePath(`/dashboard/${PATH}`);
-    return { message: `Deleted ${NAME}.` };
   } catch (error) {
-    return { message: `Database Error: Failed to Delete ${NAME}.` };
     console.log(error);
   }
 }
@@ -129,7 +120,6 @@ export async function updateRecipeActive(id: string) {
           WHERE id = ${id}
         `;
   } catch (error) {
-    return { message: `Database Error: Failed to Update ${NAME}.` };
     console.log(error);
   }
   revalidatePath(`/dashboard`);

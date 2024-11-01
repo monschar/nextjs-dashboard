@@ -28,10 +28,7 @@ export async function createIngredient(formData: FormData) {
   });
 
   if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: "Missing Fields. Failed to Create Ingredient.",
-    };
+    return;
   }
 
   const { name, price, tag, imageUrl, stock } = validatedFields.data;
@@ -43,9 +40,6 @@ export async function createIngredient(formData: FormData) {
         VALUES (${name},${price},${tag}, ${imageUrl}, ${date}, ${stock})
       `;
   } catch (error) {
-    return {
-      message: "Database Error: Failed to Create Ingredient.",
-    };
     console.log(error);
   }
 
@@ -69,7 +63,6 @@ export async function updateIngredient(id: string, formData: FormData) {
           WHERE id = ${id}
         `;
   } catch (error) {
-    return { message: "Database Error: Failed to Update Ingredient." };
     console.log(error);
   }
 
@@ -81,9 +74,7 @@ export async function deleteIngredient(id: string) {
   try {
     await sql`DELETE FROM ingredients WHERE id = ${id}`;
     revalidatePath("/dashboard/ingredients");
-    return { message: "Deleted Ingredient." };
   } catch (error) {
-    return { message: "Database Error: Failed to Delete Ingredient." };
     console.log(error);
   }
 }

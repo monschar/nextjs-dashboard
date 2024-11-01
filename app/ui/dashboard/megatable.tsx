@@ -1,7 +1,12 @@
 "use client";
 
 import * as React from "react";
-import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridColDef,
+  GridRenderCellParams,
+  GridValidRowModel,
+} from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import { RecipesTable } from "@/app/lib/recipes/definitions";
 import { formatCurrency } from "@/app/lib/utils";
@@ -9,7 +14,7 @@ import { Checkbox } from "@mui/material";
 import { updateRecipeActive } from "@/app/lib/recipes/actions";
 
 const columns: GridColDef[] = [
-  { field: "id", headerName: "ID", },
+  { field: "id", headerName: "ID" },
   { field: "name", headerName: "Name", flex: 1 },
   {
     field: "price",
@@ -66,8 +71,11 @@ const columns: GridColDef[] = [
     field: "active",
     type: "boolean",
     headerName: "Active",
-    renderCell: (params: GridRenderCellParams<any, boolean>) => (
-      <Checkbox  checked={params.value} onClick={() => updateRecipeActive(params.row.id)}/>
+    renderCell: (params: GridRenderCellParams<GridValidRowModel, boolean>) => (
+      <Checkbox
+        checked={params.value}
+        onClick={() => updateRecipeActive(params.row.id)}
+      />
     ),
     flex: 1,
     headerAlign: "left",

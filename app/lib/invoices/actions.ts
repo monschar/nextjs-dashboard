@@ -39,10 +39,7 @@ export async function createInvoice(formData: FormData) {
   });
 
   if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: "Missing Fields. Failed to Create Invoice.",
-    };
+    return;
   }
 
   const { customerId, amount, status } = validatedFields.data;
@@ -55,9 +52,6 @@ export async function createInvoice(formData: FormData) {
         VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
       `;
   } catch (error) {
-    return {
-      message: "Database Error: Failed to Create Invoice.",
-    };
     console.log(error);
   }
 
@@ -81,7 +75,6 @@ export async function updateInvoice(id: string, formData: FormData) {
           WHERE id = ${id}
         `;
   } catch (error) {
-    return { message: "Database Error: Failed to Update Invoice." };
     console.log(error);
   }
 
@@ -93,9 +86,7 @@ export async function deleteInvoice(id: string) {
   try {
     await sql`DELETE FROM invoices WHERE id = ${id}`;
     revalidatePath("/dashboard/invoices");
-    return { message: "Deleted Invoice." };
   } catch (error) {
-    return { message: "Database Error: Failed to Delete Invoice." };
     console.log(error);
   }
 }

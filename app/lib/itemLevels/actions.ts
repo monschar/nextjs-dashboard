@@ -28,10 +28,7 @@ export async function createItemLevel(formData: FormData) {
     name: formData.get("name"),
   });
   if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: "Missing Fields. Failed to Create Item Level.",
-    };
+    return;
   }
 
   const { name } = validatedFields.data;
@@ -43,9 +40,6 @@ export async function createItemLevel(formData: FormData) {
         VALUES (${name},${date})
       `;
   } catch (error) {
-    return {
-      message: "Database Error: Failed to Create Item Level.",
-    };
     console.log(error);
   }
 
@@ -65,7 +59,6 @@ export async function updateItemLevel(id: string, formData: FormData) {
           WHERE id = ${id}
         `;
   } catch (error) {
-    return { message: "Database Error: Failed to Update Item Level." };
     console.log(error);
   }
 
@@ -77,9 +70,7 @@ export async function deleteItemLevel(id: string) {
   try {
     await sql`DELETE FROM item_levels WHERE id = ${id}`;
     revalidatePath("/dashboard/item-levels");
-    return { message: "Deleted Item Level." };
   } catch (error) {
-    return { message: "Database Error: Failed to Delete Item Level." };
     console.log(error);
   }
 }
