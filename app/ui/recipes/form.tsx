@@ -5,7 +5,15 @@ import { TagIcon, CurrencyDollarIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { Button } from "@/app/ui/button";
 import { createRecipe, updateRecipe } from "@/app/lib/recipes/actions";
-import { DASHBOARD_PAGES, FormActionType } from "@/app/lib/consts";
+import {
+  CookingAppliances,
+  DASHBOARD_PAGES,
+  FormActionType,
+  ItemLevels,
+  RecipeLabels,
+  RecipeStructure,
+  RecipeTypes,
+} from "@/app/lib/consts";
 import {
   iconClassName,
   NumberInput,
@@ -13,6 +21,7 @@ import {
   SelectInput,
   TextInput,
 } from "../dashboard/form/inputs";
+import { getOptionsFromEnum } from "@/app/lib/utils";
 
 type CreateFormProps = {
   formActionType: FormActionType.Create;
@@ -33,13 +42,17 @@ const defaultValues: RecipeFormType = {
   id: "",
   name: "",
   price: 0,
-  type: "Appetizer",
   ingredient1: "",
   ingredient2: "",
   ingredient3: "",
   ingredient4: "",
   ingredient5: "",
   active: false,
+  itemLevel: undefined,
+  recipeStructure: undefined,
+  recipeType: undefined,
+  recipeLabel: undefined,
+  cookingAppliance: undefined,
 };
 
 export default function RecipesForm({
@@ -68,19 +81,56 @@ export default function RecipesForm({
           defaultValue={currentFormValues.name}
         />
 
+        <SelectInput
+          label="Level"
+          id="item-level"
+          name="item-level"
+          options={getOptionsFromEnum(ItemLevels)}
+          defaultValue={currentFormValues.itemLevel ?? ""}
+          icon={<TagIcon className={iconClassName} />}
+        />
+
+        <SelectInput
+          label="Structure"
+          id="recipe-structure"
+          name="recipe-structure"
+          options={getOptionsFromEnum(RecipeStructure)}
+          defaultValue={currentFormValues.recipeStructure ?? ""}
+          icon={<TagIcon className={iconClassName} />}
+        />
+
+        <SelectInput
+          label="Cooking Appliance"
+          id="cooking-appliance"
+          name="cooking-appliance"
+          options={getOptionsFromEnum(CookingAppliances)}
+          defaultValue={currentFormValues.cookingAppliance ?? ""}
+          icon={<TagIcon className={iconClassName} />}
+        />
+        <SelectInput
+          label="Type"
+          id="recipe-type"
+          name="recipe-type"
+          options={getOptionsFromEnum(RecipeTypes)}
+          defaultValue={currentFormValues.recipeType ?? ""}
+          icon={<TagIcon className={iconClassName} />}
+        />
+
+        <SelectInput
+          label="Label"
+          id="recipe-label"
+          name="recipe-label"
+          options={getOptionsFromEnum(RecipeLabels)}
+          defaultValue={currentFormValues.recipeLabel ?? ""}
+          icon={<TagIcon className={iconClassName} />}
+        />
+
         <NumberInput
           label="Price"
           id="price"
           name="price"
           defaultValue={currentFormValues.price}
           icon={<CurrencyDollarIcon className={iconClassName} />}
-        />
-
-        <TextInput
-          label="Type"
-          id="type"
-          name="type"
-          defaultValue={currentFormValues.type}
         />
 
         <SelectInput

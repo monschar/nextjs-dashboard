@@ -31,3 +31,43 @@ export enum FormActionType {
   Create,
   Edit,
 }
+
+export enum ItemLevels {
+  COMMON = "COMMON",
+  RARE = "RARE",
+  EPIC = "EPIC",
+}
+
+export enum RecipeStructure {
+  APPETIZER = "APPETIZER",
+  MAIN_COURSE = "MAIN_COURSE",
+  DESSERT = "DESSERT",
+  BEVERAGE = "BEVERAGE",
+}
+
+export enum RecipeTypes {
+  BAKED = "BAKED",
+  BBQ = "BBQ",
+  MIXOLOGY = "MIXOLOGY",
+  MOLECULAR = "MOLECULAR",
+  SEAFOOD = "SEAFOOD",
+  VEGI = "VEGI",
+}
+
+export enum RecipeLabels {
+  MEAT = "MEAT",
+  VEGAN = "VEGAN",
+  VEGETARIAN = "VEGETARIAN",
+}
+
+export enum CookingAppliances {
+  BARISTA_MACHINE = "BARISTA_MACHINE",
+  BLENDER = "BLENDER",
+  CHEF_COUNTER = "CHEF_COUNTER",
+  FRIER = "FRIER",
+  GRILL = "GRILL",
+  ICE_CREAM_MACHINE = "ICE_CREAM_MACHINE",
+  OVEN = "OVEN",
+  STEAMER = "STEAMER",
+  STOVE = "STOVE",
+}

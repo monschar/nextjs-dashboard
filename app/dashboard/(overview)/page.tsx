@@ -27,10 +27,12 @@ export default async function Page() {
       <div className="mt-6 w-100">
         <MegaTable recipeData={recipeData} />
       </div>
-      <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
+      <div className="mt-6 grid grid-cols-1 gap-6">
         <Suspense fallback={<RevenueChartSkeleton />}>
           <RevenueChart />
         </Suspense>
+      </div>
+      <div className="mt-6 grid grid-cols-1 gap-6">
         <Suspense fallback={<LatestInvoicesSkeleton />}>
           <LatestInvoices />
         </Suspense>

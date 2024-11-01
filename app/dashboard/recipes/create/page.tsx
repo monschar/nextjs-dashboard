@@ -4,7 +4,7 @@ import { DASHBOARD_PAGES, FormActionType } from "@/app/lib/consts";
 import { fetchAllIngredients } from "@/app/lib/ingredients/data";
 
 export default async function Page() {
-  const { NAME, PATH } = DASHBOARD_PAGES.INGREDIENTS;
+  const { NAME, PATH } = DASHBOARD_PAGES.RECIPES;
   const ingredientsList = await fetchAllIngredients();
   return (
     <main>

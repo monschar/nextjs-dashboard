@@ -3,7 +3,7 @@ import { DeleteItemButton, UpdateItemButton } from "../dashboard/buttons";
 import { deleteRecipe } from "@/app/lib/recipes/actions";
 import { RecipesTable as IngredientsTableType } from "@/app/lib/recipes/definitions";
 import { DASHBOARD_PAGES } from "@/app/lib/consts";
-import { formatCurrency } from "@/app/lib/utils";
+import { formatCurrency, constToReadable } from "@/app/lib/utils";
 import RecipeStatus from "./status";
 
 export default async function RecipesTable({
@@ -28,7 +28,6 @@ export default async function RecipesTable({
       <td className="whitespace-nowrap px-3 py-3">
         {formatCurrency(item.price)}
       </td>
-      <td className="whitespace-nowrap px-3 py-3">{item.type}</td>
       <td className="whitespace-nowrap px-3 py-3">{item.ingredient1 ?? "-"}</td>
       <td className="whitespace-nowrap px-3 py-3">{item.ingredient2 ?? "-"}</td>
       <td className="whitespace-nowrap px-3 py-3">{item.ingredient3 ?? "-"}</td>
@@ -62,13 +61,11 @@ export default async function RecipesTable({
       <div className="flex w-full items-center justify-between pt-4">
         <div>
           <p className="text-xl font-medium">{formatCurrency(item.price)}</p>
-          <p>{item.type}</p>
           <p>{item.ingredient1 ?? "-"}</p>
           <p>{item.ingredient2 ?? "-"}</p>
           <p>{item.ingredient3 ?? "-"}</p>
           <p>{item.ingredient4 ?? "-"}</p>
           <p>{item.ingredient5 ?? "-"}</p>
-          <p>{item.active}</p>
         </div>
         <div className="flex justify-end gap-2">
           <UpdateItemButton id={item.id} parentPath={PATH} />
@@ -98,9 +95,6 @@ export default async function RecipesTable({
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
                   Price
-                </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  Type
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
                   Ingredient1

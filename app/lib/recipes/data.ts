@@ -8,14 +8,18 @@ export async function fetchAllRecipes() {
       SELECT 
           r.id AS id,
           r.name AS name,
-          r.type AS type,
           r.price AS price,
           r.active AS active,
           i1.name AS ingredient1,
           i2.name AS ingredient2,
           i3.name AS ingredient3,
           i4.name AS ingredient4,
-          i5.name AS ingredient5
+          i5.name AS ingredient5,
+          r.item_level AS "itemLevel",
+          r.recipe_structure AS "recipeStructure",
+          r.recipe_type AS "recipeType",
+          r.recipe_label AS "recipeLabel",
+          r.cooking_appliance AS "cookingAppliance"
       FROM 
           recipes r
       LEFT JOIN 
@@ -44,14 +48,18 @@ export async function fetchFilteredRecipes(query: string, currentPage: number) {
       SELECT 
           r.id AS id,
           r.name AS name,
-          r.type AS type,
           r.price AS price,
           r.active AS active,
           i1.name AS ingredient1,
           i2.name AS ingredient2,
           i3.name AS ingredient3,
           i4.name AS ingredient4,
-          i5.name AS ingredient5
+          i5.name AS ingredient5,
+          r.item_level AS "itemLevel",
+          r.recipe_structure AS "recipeStructure",
+          r.recipe_type AS "recipeType",
+          r.recipe_label AS "recipeLabel",
+          r.cooking_appliance AS "cookingAppliance"
       FROM 
           recipes r
       LEFT JOIN 
@@ -69,7 +77,6 @@ export async function fetchFilteredRecipes(query: string, currentPage: number) {
       ORDER BY r.name ASC
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `;
-
     return recipes.rows;
   } catch (error) {
     console.error("Database Error:", error);
@@ -98,14 +105,18 @@ export async function fetchRecipeById(id: string) {
       SELECT 
           r.id AS id,
           r.name AS name,
-          r.type AS type,
           r.price AS price,
           r.active AS active,
           r.ingredient1 AS ingredient1,
           r.ingredient2 AS ingredient2,
           r.ingredient3 AS ingredient3,
           r.ingredient4 AS ingredient4,
-          r.ingredient5 AS ingredient5
+          r.ingredient5 AS ingredient5,
+          r.item_level AS "itemLevel",
+          r.recipe_structure AS "recipeStructure",
+          r.recipe_type AS "recipeType",
+          r.recipe_label AS "recipeLabel",
+          r.cooking_appliance AS "cookingAppliance"
       FROM 
           recipes r
       WHERE r.id = ${id};
@@ -117,5 +128,45 @@ export async function fetchRecipeById(id: string) {
   } catch (error) {
     console.error("Database Error:", error);
     throw new Error("Failed to fetch recipe.");
+  }
+}
+
+export async function fetchActiveRecipes() {
+  try {
+    const result = await sql<RecipesTable>`
+    SELECT 
+        r.id AS id,
+        r.name AS name,
+        r.price AS price,
+        r.active AS active,
+        i1.name AS ingredient1,
+        i2.name AS ingredient2,
+        i3.name AS ingredient3,
+        i4.name AS ingredient4,
+        i5.name AS ingredient5,
+        r.item_level AS "itemLevel",
+        r.recipe_structure AS "recipeStructure",
+        r.recipe_type AS "recipeType",
+        r.recipe_label AS "recipeLabel",
+        r.cooking_appliance AS "cookingAppliance"
+    FROM 
+        recipes r
+    LEFT JOIN 
+        ingredients i1 ON r.ingredient1 = i1.id
+    LEFT JOIN 
+        ingredients i2 ON r.ingredient2 = i2.id
+    LEFT JOIN 
+        ingredients i3 ON r.ingredient3 = i3.id
+    LEFT JOIN 
+        ingredients i4 ON r.ingredient4 = i4.id
+    LEFT JOIN 
+        ingredients i5 ON r.ingredient5 = i5.id
+    WHERE
+        r.active = true
+    `;
+    return result.rows;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch total number of active recipes.");
   }
 }

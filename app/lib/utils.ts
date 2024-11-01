@@ -67,3 +67,22 @@ export const generatePagination = (currentPage: number, totalPages: number) => {
     totalPages,
   ];
 };
+
+export const constToReadable = (str: string) => {
+  return str
+    .split("_")
+    .map(
+      (e: string) =>
+        String(e).charAt(0).toUpperCase() +
+        String(e).slice(1).toLocaleLowerCase()
+    )
+    .join(" ");
+};
+
+export const getOptionsFromEnum = (e: Object) => {
+  const res = Object.values(e).map((i) => ({
+    value: i,
+    label: constToReadable(i),
+  }));
+  return res;
+};

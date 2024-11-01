@@ -83,7 +83,7 @@ const columns: GridColDef[] = [
   },
 ];
 
-const paginationModel = { page: 0, pageSize: 5 };
+const paginationModel = { page: 0, pageSize: 50 };
 
 export default function MegaTable({
   recipeData,
@@ -91,11 +91,10 @@ export default function MegaTable({
   recipeData: RecipesTable[];
 }) {
   return (
-    <Paper sx={{ height: 400, width: "100%" }}>
+    <Paper sx={{ height: 800, width: "100%" }}>
       <DataGrid
         rows={recipeData}
         columns={columns}
-        pageSizeOptions={[5, 10]}
         columnVisibilityModel={{ id: false }}
         initialState={{
           sorting: {

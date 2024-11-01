@@ -12,13 +12,17 @@ const FormSchema = z.object({
   id: z.string(),
   name: z.string(),
   price: z.coerce.number(),
-  type: z.string(),
   ingredient1: z.string().nullable(),
   ingredient2: z.string().nullable(),
   ingredient3: z.string().nullable(),
   ingredient4: z.string().nullable(),
   ingredient5: z.string().nullable(),
   active: z.boolean(),
+  itemLevel: z.string(),
+  recipeStructure: z.string(),
+  recipeType: z.string(),
+  recipeLabel: z.string(),
+  cookingAppliance: z.string(),
 });
 
 const CreateRecipe = FormSchema.omit({ id: true });
@@ -28,13 +32,17 @@ export async function createRecipe(formData: FormData) {
   const validatedFields = CreateRecipe.safeParse({
     name: formData.get("name"),
     price: formData.get("price"),
-    type: formData.get("type"),
     ingredient1: formData.get("ingredient1"),
     ingredient2: formData.get("ingredient2"),
     ingredient3: formData.get("ingredient3"),
     ingredient4: formData.get("ingredient4"),
     ingredient5: formData.get("ingredient5"),
     active: formData.get("active") === "TRUE",
+    itemLevel: formData.get("item-level"),
+    recipeStructure: formData.get("recipe-structure"),
+    recipeType: formData.get("recipe-type"),
+    recipeLabel: formData.get("recipe-label"),
+    cookingAppliance: formData.get("cooking-appliance"),
   });
   if (!validatedFields.success) {
     console.log(validatedFields.error.flatten().fieldErrors);
@@ -44,19 +52,23 @@ export async function createRecipe(formData: FormData) {
   const {
     name,
     price,
-    type,
     ingredient1,
     ingredient2,
     ingredient3,
     ingredient4,
     ingredient5,
     active,
+    itemLevel,
+    recipeStructure,
+    recipeType,
+    recipeLabel,
+    cookingAppliance,
   } = validatedFields.data;
 
   try {
     await sql`
-        INSERT INTO recipes (name, price, type, ingredient1, ingredient2, ingredient3, ingredient4, ingredient5, active)
-        VALUES (${name},${price},${type}, ${ingredient1}, ${ingredient2}, ${ingredient3}, ${ingredient4}, ${ingredient5}, ${active})
+        INSERT INTO recipes (name, price, ingredient1, ingredient2, ingredient3, ingredient4, ingredient5, active, item_level, recipe_structure, recipe_type, recipe_label, cooking_appliance)
+        VALUES (${name},${price}, ${ingredient1}, ${ingredient2}, ${ingredient3}, ${ingredient4}, ${ingredient5}, ${active}, ${itemLevel}, ${recipeStructure}, ${recipeType}, ${recipeLabel}, ${cookingAppliance})
       `;
   } catch (error) {
     console.log(error);
@@ -70,13 +82,17 @@ export async function updateRecipe(id: string, formData: FormData) {
   const {
     name,
     price,
-    type,
     ingredient1,
     ingredient2,
     ingredient3,
     ingredient4,
     ingredient5,
     active,
+    itemLevel,
+    recipeStructure,
+    recipeType,
+    recipeLabel,
+    cookingAppliance,
   } = UpdateRecipe.parse({
     name: formData.get("name"),
     price: formData.get("price"),
@@ -87,12 +103,17 @@ export async function updateRecipe(id: string, formData: FormData) {
     ingredient4: formData.get("ingredient4"),
     ingredient5: formData.get("ingredient5"),
     active: formData.get("active") === "TRUE",
+    itemLevel: formData.get("item-level"),
+    recipeStructure: formData.get("recipe-structure"),
+    recipeType: formData.get("recipe-type"),
+    recipeLabel: formData.get("recipe-label"),
+    cookingAppliance: formData.get("cooking-appliance"),
   });
 
   try {
     await sql`
           UPDATE recipes
-          SET name = ${name}, price = ${price}, type = ${type}, ingredient1 = ${ingredient1}, ingredient2 = ${ingredient2}, ingredient3 = ${ingredient3}, ingredient4 = ${ingredient4}, ingredient5 = ${ingredient5}, active = ${active}
+          SET name = ${name}, price = ${price}, ingredient1 = ${ingredient1}, ingredient2 = ${ingredient2}, ingredient3 = ${ingredient3}, ingredient4 = ${ingredient4}, ingredient5 = ${ingredient5}, active = ${active}, item_level = ${itemLevel}, recipe_structure = ${recipeStructure}, recipe_type = ${recipeType}, recipe_label = ${recipeLabel}, cooking_appliance = ${cookingAppliance}
           WHERE id = ${id}
         `;
   } catch (error) {
