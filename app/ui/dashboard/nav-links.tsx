@@ -1,10 +1,8 @@
 "use client";
 
 import {
-  UserGroupIcon,
   HomeIcon,
   DocumentDuplicateIcon,
-  ChevronDoubleUpIcon,
   CakeIcon,
   BugAntIcon,
 } from "@heroicons/react/24/outline";
