@@ -22,12 +22,6 @@ const links = [
     href: "/dashboard/invoices",
     icon: DocumentDuplicateIcon,
   },
-  { name: "Customers", href: "/dashboard/customers", icon: UserGroupIcon },
-  {
-    name: "Item Levels",
-    href: "/dashboard/item-levels",
-    icon: ChevronDoubleUpIcon,
-  },
   {
     name: DASHBOARD_PAGES.INGREDIENTS.NAME,
     href: `/dashboard/${DASHBOARD_PAGES.INGREDIENTS.PATH}`,
