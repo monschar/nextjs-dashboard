@@ -23,6 +23,7 @@ const FormSchema = z.object({
   recipeType: z.string(),
   recipeLabel: z.string(),
   cookingAppliance: z.string(),
+  imageUrl: z.string(),
 });
 
 const CreateRecipe = FormSchema.omit({ id: true });
@@ -65,10 +66,12 @@ export async function createRecipe(formData: FormData) {
     cookingAppliance,
   } = validatedFields.data;
 
+  const image_url = `/recipes/FA ${name}.png`
+
   try {
     await sql`
-        INSERT INTO recipes (name, price, ingredient1, ingredient2, ingredient3, ingredient4, ingredient5, active, item_level, recipe_structure, recipe_type, recipe_label, cooking_appliance)
-        VALUES (${name},${price}, ${ingredient1}, ${ingredient2}, ${ingredient3}, ${ingredient4}, ${ingredient5}, ${active}, ${itemLevel}, ${recipeStructure}, ${recipeType}, ${recipeLabel}, ${cookingAppliance})
+        INSERT INTO recipes (name, price, ingredient1, ingredient2, ingredient3, ingredient4, ingredient5, active, item_level, recipe_structure, recipe_type, recipe_label, cooking_appliance, image_url)
+        VALUES (${name},${price}, ${ingredient1}, ${ingredient2}, ${ingredient3}, ${ingredient4}, ${ingredient5}, ${active}, ${itemLevel}, ${recipeStructure}, ${recipeType}, ${recipeLabel}, ${cookingAppliance}, ${image_url})
       `;
   } catch (error) {
     console.log(error);
@@ -93,6 +96,7 @@ export async function updateRecipe(id: string, formData: FormData) {
     recipeType,
     recipeLabel,
     cookingAppliance,
+    imageUrl
   } = UpdateRecipe.parse({
     name: formData.get("name"),
     price: formData.get("price"),
@@ -108,12 +112,12 @@ export async function updateRecipe(id: string, formData: FormData) {
     recipeType: formData.get("recipe-type"),
     recipeLabel: formData.get("recipe-label"),
     cookingAppliance: formData.get("cooking-appliance"),
+    imageUrl: formData.get("image-url"),
   });
-
   try {
     await sql`
           UPDATE recipes
-          SET name = ${name}, price = ${price}, ingredient1 = ${ingredient1}, ingredient2 = ${ingredient2}, ingredient3 = ${ingredient3}, ingredient4 = ${ingredient4}, ingredient5 = ${ingredient5}, active = ${active}, item_level = ${itemLevel}, recipe_structure = ${recipeStructure}, recipe_type = ${recipeType}, recipe_label = ${recipeLabel}, cooking_appliance = ${cookingAppliance}
+          SET name = ${name}, price = ${price}, ingredient1 = ${ingredient1}, ingredient2 = ${ingredient2}, ingredient3 = ${ingredient3}, ingredient4 = ${ingredient4}, ingredient5 = ${ingredient5}, active = ${active}, item_level = ${itemLevel}, recipe_structure = ${recipeStructure}, recipe_type = ${recipeType}, recipe_label = ${recipeLabel}, cooking_appliance = ${cookingAppliance}, image_url=${imageUrl}
           WHERE id = ${id}
         `;
   } catch (error) {

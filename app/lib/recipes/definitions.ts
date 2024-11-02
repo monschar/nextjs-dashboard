@@ -21,6 +21,7 @@ export type Recipe = {
   recipeType: RecipeTypes;
   recipeLabel: RecipeLabels;
   cookingAppliance: CookingAppliances;
+  imageUrl: string;
 };
 
 export type RecipesTable = {
@@ -38,6 +39,7 @@ export type RecipesTable = {
   recipeType: RecipeTypes;
   recipeLabel: RecipeLabels;
   cookingAppliance: CookingAppliances;
+  imageUrl: string;
 };
 
 export type RecipeForm = {
@@ -55,4 +57,5 @@ export type RecipeForm = {
   recipeType: RecipeTypes | undefined;
   recipeLabel: RecipeLabels | undefined;
   cookingAppliance: CookingAppliances | undefined;
+  imageUrl: string;
 };

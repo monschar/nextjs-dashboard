@@ -10,7 +10,6 @@ const FormSchema = z.object({
   name: z.string({
     invalid_type_error: "Please enter a name.",
   }),
-  date: z.string(),
 });
 
 export type State = {
@@ -20,24 +19,24 @@ export type State = {
   message?: string | null;
 };
 
-const CreateItemLevel = FormSchema.omit({ id: true, date: true });
-const UpdateItemLevel = FormSchema.omit({ id: true, date: true });
+const CreateItemLevel = FormSchema.omit({ id: true});
+const UpdateItemLevel = FormSchema.omit({ id: true});
 
 export async function createItemLevel(formData: FormData) {
   const validatedFields = CreateItemLevel.safeParse({
     name: formData.get("name"),
   });
   if (!validatedFields.success) {
+    console.log(validatedFields.error.flatten().fieldErrors);
     return;
   }
 
   const { name } = validatedFields.data;
-  const date = new Date().toISOString().split("T")[0];
 
   try {
     await sql`
-        INSERT INTO item_levels (name, date)
-        VALUES (${name},${date})
+        INSERT INTO item_levels (name, )
+        VALUES (${name}})
       `;
   } catch (error) {
     console.log(error);

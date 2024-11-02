@@ -39,6 +39,7 @@ export async function createInvoice(formData: FormData) {
   });
 
   if (!validatedFields.success) {
+    console.log(validatedFields.error.flatten().fieldErrors);
     return;
   }
 

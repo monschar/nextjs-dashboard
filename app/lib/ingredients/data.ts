@@ -7,9 +7,7 @@ export async function fetchIngredientsPages(query: string) {
     const count = await sql`SELECT COUNT(*)
     FROM ingredients
     WHERE
-      ingredients.name ILIKE ${`%${query}%`} OR
-      ingredients.tag ILIKE ${`%${query}%`} OR
-      ingredients.date::text ILIKE ${`%${query}%`}
+      ingredients.name ILIKE ${`%${query}%`}
   `;
     const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
     return totalPages;
@@ -22,7 +20,14 @@ export async function fetchIngredientsPages(query: string) {
 export async function fetchIngredientById(id: string) {
   try {
     const data = await sql<IngredientForm>`
-        SELECT *
+        SELECT
+          id,
+          name,
+          price,
+          image_url as "imageUrl",
+          stock,
+          sequence,
+          item_level as "itemLevel"
         FROM ingredients
         WHERE ingredients.id = ${id};
       `;
@@ -44,12 +49,17 @@ export async function fetchFilteredIngredients(
 
   try {
     const ingredients = await sql<IngredientsTable>`
-      SELECT *
+      SELECT
+          id,
+          name,
+          price,
+          image_url as "imageUrl",
+          stock,
+          sequence,
+          item_level as "itemLevel"
       FROM ingredients
       WHERE
-        ingredients.name ILIKE ${`%${query}%`} OR
-        ingredients.tag ILIKE ${`%${query}%`} OR
-        ingredients.date::text ILIKE ${`%${query}%`}
+        ingredients.name ILIKE ${`%${query}%`}
       ORDER BY ingredients.name ASC
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `;
@@ -64,7 +74,14 @@ export async function fetchFilteredIngredients(
 export async function fetchAllIngredients() {
   try {
     const ingredients = await sql<IngredientsTable>`
-      SELECT *
+      SELECT
+          id,
+          name,
+          price,
+          image_url as "imageUrl",
+          stock,
+          sequence,
+          item_level as "itemLevel"
       FROM ingredients
       ORDER BY ingredients.name ASC
     `;

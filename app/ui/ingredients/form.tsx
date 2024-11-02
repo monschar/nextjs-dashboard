@@ -12,13 +12,14 @@ import {
   createIngredient,
   updateIngredient,
 } from "@/app/lib/ingredients/actions";
-import { DASHBOARD_PAGES, FormActionType } from "@/app/lib/consts";
+import { DASHBOARD_PAGES, FormActionType, ItemLevels } from "@/app/lib/consts";
 import {
   iconClassName,
   NumberInput,
   SelectInput,
   TextInput,
 } from "../dashboard/form/inputs";
+import { getOptionsFromEnum } from "@/app/lib/utils";
 
 type CreateFormProps = {
   formActionType: FormActionType.Create;
@@ -33,9 +34,10 @@ const defaultValues: IngredientFormType = {
   name: "",
   id: "",
   price: 0,
-  tag: "N/A",
   stock: 0,
-  image_url: "none",
+  imageUrl: "",
+  sequence: -1,
+  itemLevel: undefined,
 };
 
 export default function IngredientForm({
@@ -60,6 +62,24 @@ export default function IngredientForm({
           defaultValue={currentFormValues.name}
         />
 
+        <SelectInput
+          label="Level"
+          id="item-level"
+          name="item-level"
+          options={getOptionsFromEnum(ItemLevels)}
+          defaultValue={currentFormValues.itemLevel ?? ""}
+          icon={<TagIcon className={iconClassName} />}
+          required
+        />
+
+        <NumberInput
+          label="Sequence"
+          id="sequence"
+          name="sequence"
+          defaultValue={currentFormValues.sequence}
+          icon={<CubeIcon className={iconClassName} />}
+        />
+
         <NumberInput
           label="Stock"
           id="stock"
@@ -76,20 +96,11 @@ export default function IngredientForm({
           icon={<CurrencyDollarIcon className={iconClassName} />}
         />
 
-        <SelectInput
-          label="Tag"
-          id="tag"
-          name="tag"
-          options={[]}
-          defaultValue={currentFormValues.tag}
-          icon={<TagIcon className={iconClassName} />}
-        />
-
         <TextInput
           label="Image Url"
           id="image-url"
           name="image-url"
-          defaultValue={currentFormValues.image_url}
+          defaultValue={`/ingredients/Large Ingredients Set_${currentFormValues.sequence}.png`}
         />
       </div>
       <div className="mt-6 flex justify-end gap-4">

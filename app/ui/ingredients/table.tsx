@@ -4,6 +4,7 @@ import { deleteIngredient } from "@/app/lib/ingredients/actions";
 import { IngredientsTable as IngredientsTableType } from "@/app/lib/ingredients/definitions";
 import { DASHBOARD_PAGES } from "@/app/lib/consts";
 import { formatCurrency } from "@/app/lib/utils";
+import Image from "next/image";
 
 export default async function IngredientsTable({
   query,
@@ -21,6 +22,13 @@ export default async function IngredientsTable({
     >
       <td className="whitespace-nowrap py-3 pl-6 pr-3">
         <div className="flex items-center gap-3">
+        {item.imageUrl !== "none" && <Image
+            src={item.imageUrl}
+            height={44}
+            width={44}
+            alt={`${item.name}'s icon`}
+            style={{objectFit: 'contain', maxHeight: '44px'}}
+          />}
           <p>{item.name}</p>
         </div>
       </td>

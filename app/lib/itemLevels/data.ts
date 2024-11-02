@@ -7,8 +7,7 @@ export async function fetchItemLevelsPages(query: string) {
     const count = await sql`SELECT COUNT(*)
     FROM item_levels
     WHERE
-      item_levels.name ILIKE ${`%${query}%`} OR
-      item_levels.date::text ILIKE ${`%${query}%`}
+      item_levels.name ILIKE ${`%${query}%`}
   `;
     const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
     return totalPages;
@@ -47,8 +46,6 @@ export async function fetchFilteredItemLevels(
       FROM item_levels
       WHERE
         item_levels.name ILIKE ${`%${query}%`} OR
-        item_levels.date::text ILIKE ${`%${query}%`}
-      ORDER BY item_levels.date DESC
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `;
 

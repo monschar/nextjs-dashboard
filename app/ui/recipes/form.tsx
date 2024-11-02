@@ -53,6 +53,7 @@ const defaultValues: RecipeFormType = {
   recipeType: undefined,
   recipeLabel: undefined,
   cookingAppliance: undefined,
+  imageUrl: ``
 };
 
 export default function RecipesForm({
@@ -79,6 +80,13 @@ export default function RecipesForm({
           id="name"
           name="name"
           defaultValue={currentFormValues.name}
+        />
+
+       <TextInput
+          label="Image Url"
+          id="image-url"
+          name="image-url"
+          defaultValue={currentFormValues.imageUrl}
         />
 
         <SelectInput

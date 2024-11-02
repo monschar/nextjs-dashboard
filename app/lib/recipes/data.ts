@@ -19,7 +19,8 @@ export async function fetchAllRecipes() {
           r.recipe_structure AS "recipeStructure",
           r.recipe_type AS "recipeType",
           r.recipe_label AS "recipeLabel",
-          r.cooking_appliance AS "cookingAppliance"
+          r.cooking_appliance AS "cookingAppliance",
+          r.image_url AS "imageUrl"
       FROM 
           recipes r
       LEFT JOIN 
@@ -59,7 +60,8 @@ export async function fetchFilteredRecipes(query: string, currentPage: number) {
           r.recipe_structure AS "recipeStructure",
           r.recipe_type AS "recipeType",
           r.recipe_label AS "recipeLabel",
-          r.cooking_appliance AS "cookingAppliance"
+          r.cooking_appliance AS "cookingAppliance",
+          r.image_url AS "imageUrl"
       FROM 
           recipes r
       LEFT JOIN 
@@ -116,7 +118,8 @@ export async function fetchRecipeById(id: string) {
           r.recipe_structure AS "recipeStructure",
           r.recipe_type AS "recipeType",
           r.recipe_label AS "recipeLabel",
-          r.cooking_appliance AS "cookingAppliance"
+          r.cooking_appliance AS "cookingAppliance",
+          r.image_url AS "imageUrl"
       FROM 
           recipes r
       WHERE r.id = ${id};
@@ -148,7 +151,8 @@ export async function fetchActiveRecipes() {
         r.recipe_structure AS "recipeStructure",
         r.recipe_type AS "recipeType",
         r.recipe_label AS "recipeLabel",
-        r.cooking_appliance AS "cookingAppliance"
+        r.cooking_appliance AS "cookingAppliance",
+        r.image_url AS "imageUrl"
     FROM 
         recipes r
     LEFT JOIN 

@@ -11,5 +11,4 @@ export type ItemLevelForm = {
 export type ItemLevelsTable = {
   id: string;
   name: string;
-  date: string;
 };

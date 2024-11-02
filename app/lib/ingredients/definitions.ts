@@ -1,28 +1,31 @@
+import { ItemLevels } from "../consts";
+
 export type Ingredients = {
   id: string;
   name: string;
-  date: string;
   price: number;
-  tag: string;
-  image_url: string;
+  imageUrl: string;
   stock: number;
+  sequence: number;
+  itemLevel: ItemLevels | undefined;
 };
 
 export type IngredientsTable = {
   id: string;
   name: string;
   price: number;
-  date: string;
-  tag: string;
-  image_url: string;
+  imageUrl: string;
   stock: number;
+  sequence: number;
+  itemLevel: ItemLevels | undefined;
 };
 
 export type IngredientForm = {
   id: string;
   name: string;
   price: number;
-  tag: string;
-  image_url: string;
+  imageUrl: string;
   stock: number;
+  sequence: number;
+  itemLevel: ItemLevels | undefined;
 };

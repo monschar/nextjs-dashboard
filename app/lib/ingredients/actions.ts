@@ -9,35 +9,36 @@ const FormSchema = z.object({
   id: z.string(),
   name: z.string(),
   price: z.coerce.number(),
-  date: z.string(),
-  tag: z.string(),
   imageUrl: z.string(),
   stock: z.coerce.number(),
+  sequence: z.coerce.number(),
+  itemLevel: z.string(),
 });
 
-const CreateIngredient = FormSchema.omit({ id: true, date: true });
-const UpdateIngredient = FormSchema.omit({ id: true, date: true });
+const CreateIngredient = FormSchema.omit({ id: true });
+const UpdateIngredient = FormSchema.omit({ id: true });
 
 export async function createIngredient(formData: FormData) {
   const validatedFields = CreateIngredient.safeParse({
     name: formData.get("name"),
     price: formData.get("price"),
-    tag: formData.get("tag"),
     imageUrl: formData.get("image-url"),
     stock: formData.get("stock"),
+    sequence: formData.get("sequence"),
+    itemLevel: formData.get("item-level"),
   });
 
   if (!validatedFields.success) {
+    console.log(validatedFields.error.flatten().fieldErrors);
     return;
   }
-
-  const { name, price, tag, imageUrl, stock } = validatedFields.data;
-  const date = new Date().toISOString().split("T")[0];
-
+  const { name, price, stock, sequence, itemLevel } =
+    validatedFields.data;
+    const imageUrl = `/ingredients/Ingredients Set_${sequence}.png`
   try {
     await sql`
-        INSERT INTO ingredients (name, price, tag, image_url, date, stock)
-        VALUES (${name},${price},${tag}, ${imageUrl}, ${date}, ${stock})
+        INSERT INTO ingredients (name, price, image_url, stock, sequence, item_level)
+        VALUES (${name}, ${price}, ${imageUrl}, ${stock}, ${sequence}, ${itemLevel})
       `;
   } catch (error) {
     console.log(error);
@@ -48,18 +49,19 @@ export async function createIngredient(formData: FormData) {
 }
 
 export async function updateIngredient(id: string, formData: FormData) {
-  const { name, price, tag, imageUrl, stock } = UpdateIngredient.parse({
-    name: formData.get("name"),
-    price: formData.get("price"),
-    tag: formData.get("tag"),
-    imageUrl: formData.get("image-url"),
-    stock: formData.get("stock"),
-  });
-
+  const { name, price, stock, sequence, itemLevel,imageUrl } =
+    UpdateIngredient.parse({
+      name: formData.get("name"),
+      price: formData.get("price"),
+      imageUrl: formData.get("image-url"),
+      stock: formData.get("stock"),
+      sequence: formData.get("sequence"),
+      itemLevel: formData.get("item-level"),
+    });
   try {
     await sql`
           UPDATE ingredients
-          SET name = ${name}, price = ${price}, tag = ${tag}, image_url = ${imageUrl}, stock = ${stock}
+          SET name = ${name}, price = ${price}, image_url = ${imageUrl}, stock = ${stock}, sequence = ${sequence}, item_level = ${itemLevel}
           WHERE id = ${id}
         `;
   } catch (error) {
