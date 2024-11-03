@@ -32,9 +32,8 @@ export async function createIngredient(formData: FormData) {
     console.log(validatedFields.error.flatten().fieldErrors);
     return;
   }
-  const { name, price, stock, sequence, itemLevel } =
-    validatedFields.data;
-    const imageUrl = `/ingredients/Ingredients Set_${sequence}.png`
+  const { name, price, stock, sequence, itemLevel } = validatedFields.data;
+  const imageUrl = `/ingredients/Ingredients Set_${sequence}.png`;
   try {
     await sql`
         INSERT INTO ingredients (name, price, image_url, stock, sequence, item_level)
@@ -49,7 +48,7 @@ export async function createIngredient(formData: FormData) {
 }
 
 export async function updateIngredient(id: string, formData: FormData) {
-  const { name, price, stock, sequence, itemLevel,imageUrl } =
+  const { name, price, stock, sequence, itemLevel, imageUrl } =
     UpdateIngredient.parse({
       name: formData.get("name"),
       price: formData.get("price"),
@@ -79,4 +78,17 @@ export async function deleteIngredient(id: string) {
   } catch (error) {
     console.log(error);
   }
+}
+
+export async function updateIngredientStock(id: string, stock: number) {
+  try {
+    await sql`
+          UPDATE ingredients
+          SET stock = ${stock}
+          WHERE id = ${id}
+        `;
+  } catch (error) {
+    console.log(error);
+  }
+  revalidatePath(`/dashboard`);
 }

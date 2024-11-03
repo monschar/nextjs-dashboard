@@ -26,7 +26,7 @@ export default async function IngredientChart() {
   }
 
   return (
-    <div className="md:col-span-4">
+    <div className="">
       {/* NOTE: Uncomment this code in Chapter 7 */}
 
       <div className="rounded-xl bg-gray-50 p-4">
