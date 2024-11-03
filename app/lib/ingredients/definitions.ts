@@ -1,6 +1,6 @@
 import { ItemLevels } from "../consts";
 
-export type Ingredients = {
+export type Ingredient = {
   id: string;
   name: string;
   price: number;
@@ -9,6 +9,9 @@ export type Ingredients = {
   sequence: number;
   itemLevel: ItemLevels | undefined;
 };
+
+export type IngredientsChart = Ingredient & {frequency: number}
+
 
 export type IngredientsTable = {
   id: string;

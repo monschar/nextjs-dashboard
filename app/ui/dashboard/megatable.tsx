@@ -12,10 +12,28 @@ import { RecipesTable } from "@/app/lib/recipes/definitions";
 import { formatCurrency } from "@/app/lib/utils";
 import { Checkbox } from "@mui/material";
 import { updateRecipeActive } from "@/app/lib/recipes/actions";
+import Image from "next/image";
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "ID" },
-  { field: "name", headerName: "Name", flex: 1 },
+  { field: "imageUrl", headerName: "Image Url" },
+  {
+    field: "name",
+    headerName: "Name",
+    flex: 1,
+    renderCell: (params: GridRenderCellParams<GridValidRowModel, string>) => (
+      <div className="flex items-center gap-3">
+       <Image
+            src={params.row.imageUrl}
+            height={44}
+            width={44}
+            alt={`${params.value}'s icon`}
+            style={{objectFit: 'contain', maxHeight: '44px'}}
+          />
+      {params.value}
+      </div>
+    ),
+  },
   {
     field: "price",
     headerName: "Price",
@@ -91,11 +109,11 @@ export default function MegaTable({
   recipeData: RecipesTable[];
 }) {
   return (
-    <Paper sx={{ height: 800, width: "100%" }}>
+    <Paper sx={{ height: 1000, width: "100%" }}>
       <DataGrid
         rows={recipeData}
         columns={columns}
-        columnVisibilityModel={{ id: false }}
+        columnVisibilityModel={{ id: false, imageUrl: false }}
         initialState={{
           sorting: {
             sortModel: [{ field: "active", sort: "desc" }],

@@ -1,4 +1,6 @@
 import { Revenue } from "./definitions";
+import { Ingredient, IngredientsChart } from "./ingredients/definitions";
+import { Recipe } from "./recipes/definitions";
 
 export const formatCurrency = (amount: number) => {
   return amount.toLocaleString("en-US", {
@@ -85,4 +87,32 @@ export const getOptionsFromEnum = (e: object) => {
     label: constToReadable(i),
   }));
   return res;
+};
+
+export const generateActiveIngredients = (
+  recipes: Recipe[],
+  ingredients: Ingredient[]
+): IngredientsChart[] => {
+  const ingredientsMap = new Map();
+  ingredients.forEach((i) => ingredientsMap.set(i.id, i));
+  const activeIngredientMap = new Map();
+  recipes.forEach((r) => {
+    const ingredients = [
+      r.ingredient1,
+      r.ingredient2,
+      r.ingredient3,
+      r.ingredient4,
+      r.ingredient5,
+    ].filter((i) => i);
+    for (const i of ingredients) {
+      if (!activeIngredientMap.has(i)) activeIngredientMap.set(i, 0);
+      activeIngredientMap.set(i, activeIngredientMap.get(i) + 1);
+    }
+  });
+  return Array.from(activeIngredientMap.keys())
+    .map((k) => ({
+      ...ingredientsMap.get(k),
+      frequency: activeIngredientMap.get(k),
+    }))
+    .sort((a, b) => b.frequency - a.frequency || a.name - b.name);
 };

@@ -100,7 +100,7 @@ export default function IngredientForm({
           label="Image Url"
           id="image-url"
           name="image-url"
-          defaultValue={`/ingredients/Large Ingredients Set_${currentFormValues.sequence}.png`}
+          defaultValue={currentFormValues.imageUrl}
         />
       </div>
       <div className="mt-6 flex justify-end gap-4">
