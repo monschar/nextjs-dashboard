@@ -37,7 +37,7 @@ export default async function IngredientChart() {
           {activeIngredients.map((i) => (
             <div key={i.id} className={clsx("flex flex-1 items-center gap-2")}>
               <div
-                className={clsx("flex w-1/6 gap-2", {
+                className={clsx("flex w-40 gap-2", {
                   "bg-rose-100": i.stock < i.frequency * 5,
                 })}
               >
@@ -55,9 +55,9 @@ export default async function IngredientChart() {
               <div
                 className="w-full rounded-md bg-blue-300"
                 style={{
-                  width: `${
-                    (i.frequency / activeIngredients[0].frequency) * 70
-                  }%`,
+                  width: `calc((100% - 12rem) * ${
+                    i.frequency / activeIngredients[0].frequency
+                  })`,
                   height: `${rowHeight * 0.8}px`,
                 }}
               ></div>
