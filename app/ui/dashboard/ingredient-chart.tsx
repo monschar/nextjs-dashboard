@@ -41,6 +41,9 @@ export default async function IngredientChart() {
                   "bg-rose-100": i.stock < i.frequency * 5,
                 })}
               >
+                <p className="w-5 text-sm flex items-center justify-center">
+                  {`${i.stock}`}
+                </p>
                 <Image
                   src={i.imageUrl}
                   height={rowHeight}
@@ -49,7 +52,7 @@ export default async function IngredientChart() {
                   style={{ objectFit: "contain", maxHeight: "28px" }}
                 />
                 <p className="text-sm flex items-center justify-center">
-                  {`${i.name} - ${i.stock}`}
+                  {`${i.name}`}
                 </p>
               </div>
               <div

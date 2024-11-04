@@ -23,14 +23,14 @@ const FormSchema = z.object({
   recipeType: z.string(),
   recipeLabel: z.string(),
   cookingAppliance: z.string(),
-  imageUrl: z.string(),
+  imageUrl: z.string().nullable(),
 });
 
 const CreateRecipe = FormSchema.omit({ id: true });
 const UpdateRecipe = FormSchema.omit({ id: true });
 
 export async function createRecipe(formData: FormData) {
-  const validatedFields = CreateRecipe.safeParse({
+  const validatedFields = CreateRecipe.parse({
     name: formData.get("name"),
     price: formData.get("price"),
     ingredient1: formData.get("ingredient1"),
@@ -44,11 +44,12 @@ export async function createRecipe(formData: FormData) {
     recipeType: formData.get("recipe-type"),
     recipeLabel: formData.get("recipe-label"),
     cookingAppliance: formData.get("cooking-appliance"),
+    imageUrl: formData.get("image-url"),
   });
-  if (!validatedFields.success) {
-    console.log(validatedFields.error.flatten().fieldErrors);
-    return;
-  }
+  // if (!validatedFields.success) {
+  //   console.log(validatedFields.error.flatten().fieldErrors);
+  //   return;
+  // }
 
   const {
     name,
@@ -64,9 +65,9 @@ export async function createRecipe(formData: FormData) {
     recipeType,
     recipeLabel,
     cookingAppliance,
-  } = validatedFields.data;
+  } = validatedFields;
 
-  const image_url = `/recipes/FA ${name}.png`
+  const image_url = `/recipes/FA ${name}.png`;
 
   try {
     await sql`
@@ -96,7 +97,7 @@ export async function updateRecipe(id: string, formData: FormData) {
     recipeType,
     recipeLabel,
     cookingAppliance,
-    imageUrl
+    imageUrl,
   } = UpdateRecipe.parse({
     name: formData.get("name"),
     price: formData.get("price"),

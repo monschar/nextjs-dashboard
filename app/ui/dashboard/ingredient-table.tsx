@@ -38,13 +38,14 @@ const columns: GridColDef[] = [
   {
     field: "price",
     headerName: "Price",
-    type: "number",
     valueGetter: (value) => {
       return formatCurrency(value);
     },
     flex: 1,
     headerAlign: "left",
     align: "left",
+    sortComparator: (v1, v2) =>
+      Number.parseInt(v1.slice(1)) - Number.parseInt(v2.slice(1)),
   },
   {
     field: "stock",
@@ -61,13 +62,13 @@ const columns: GridColDef[] = [
 const paginationModel = { page: 0, pageSize: 100 };
 
 const handleProcessRowUpdate = (newRow: GridRowModel) => {
-    const stock = Number.parseInt(newRow.stock) ;
-    if (!Number.isInteger(stock)) {
-      throw new Error('Stock must be an integer');
-    }
-    updateIngredientStock(newRow.id, newRow.stock)
-    return newRow;
-  };
+  const stock = Number.parseInt(newRow.stock);
+  if (!Number.isInteger(stock)) {
+    throw new Error("Stock must be an integer");
+  }
+  updateIngredientStock(newRow.id, newRow.stock);
+  return newRow;
+};
 
 export default function IngredientTable({
   ingredientData,
@@ -88,8 +89,8 @@ export default function IngredientTable({
         }}
         processRowUpdate={handleProcessRowUpdate}
         onProcessRowUpdateError={(error) => {
-            alert(error.message);
-          }}
+          alert(error.message);
+        }}
       />
     </Paper>
   );
