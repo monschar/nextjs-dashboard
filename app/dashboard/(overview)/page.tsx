@@ -1,7 +1,6 @@
-import CardWrapper from "@/app/ui/dashboard/cards";
 import { lusitana } from "@/app/ui/fonts";
 import { Suspense } from "react";
-import { RevenueChartSkeleton, CardsSkeleton } from "@/app/ui/skeletons";
+import { RevenueChartSkeleton } from "@/app/ui/skeletons";
 import MegaTable from "@/app/ui/dashboard/megatable";
 import { fetchAllRecipes } from "@/app/lib/recipes/data";
 import IngredientChart from "@/app/ui/dashboard/ingredient-chart";
