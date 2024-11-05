@@ -142,7 +142,12 @@ export async function fetchRecipeById(id: string) {
 export async function fetchActiveRecipes() {
   try {
     const result = await sql<RecipesTable>`
-    SELECT *
+    SELECT *, 
+        image_url as "imageUrl",
+        item_level as "itemLevel",
+        recipe_label as "recipeLabel",
+        recipe_structure as "recipeStructure",
+        recipe_type as "recipe_type"
     FROM 
         recipes r
     WHERE

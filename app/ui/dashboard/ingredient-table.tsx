@@ -46,6 +46,7 @@ const columns: GridColDef[] = [
     align: "left",
     sortComparator: (v1, v2) =>
       Number.parseInt(v1.slice(1)) - Number.parseInt(v2.slice(1)),
+    editable: true,
   },
   {
     field: "stock",
@@ -76,7 +77,7 @@ export default function IngredientTable({
   ingredientData: Ingredient[];
 }) {
   return (
-    <Paper sx={{ height: 1000, width: "100%" }}>
+    <Paper sx={{ height: 1400, width: "100%" }}>
       <DataGrid
         rows={ingredientData}
         columns={columns}

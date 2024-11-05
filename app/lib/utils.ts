@@ -1,3 +1,4 @@
+import { ItemLevels, RecipeStructure } from "./consts";
 import { Revenue } from "./definitions";
 import { Ingredient, IngredientsChart } from "./ingredients/definitions";
 import { Recipe } from "./recipes/definitions";
@@ -115,4 +116,17 @@ export const generateActiveIngredients = (
       frequency: activeIngredientMap.get(k),
     }))
     .sort((a, b) => b.frequency - a.frequency || a.name - b.name);
+};
+
+export const categorizeActiveRecipes = (recipes: Recipe[]) => {
+  const itemLevelKeys = Object.keys(ItemLevels);
+  return Object.keys(RecipeStructure).map((k) => ({
+    title: constToReadable(k),
+    list: recipes
+      .filter((r) => r.recipeStructure === k)
+      .sort(
+        (a, b) =>
+          itemLevelKeys.indexOf(a.itemLevel) - itemLevelKeys.indexOf(b.itemLevel)
+      ),
+  }));
 };

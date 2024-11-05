@@ -23,14 +23,14 @@ const columns: GridColDef[] = [
     flex: 1,
     renderCell: (params: GridRenderCellParams<GridValidRowModel, string>) => (
       <div className="flex items-center gap-3">
-       <Image
-            src={params.row.imageUrl}
-            height={44}
-            width={44}
-            alt={`${params.value}'s icon`}
-            style={{objectFit: 'contain', maxHeight: '44px'}}
-          />
-      {params.value}
+        <Image
+          src={params.row.imageUrl}
+          height={44}
+          width={44}
+          alt={`${params.value}'s icon`}
+          style={{ objectFit: "contain", width: "45px", height: "45px" }}
+        />
+        {params.value}
       </div>
     ),
   },
