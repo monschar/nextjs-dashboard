@@ -1,4 +1,9 @@
 export const ITEMS_PER_PAGE = 100;
+export const ICON_SIZE = {
+  SM: 25,
+  MD: 35,
+  L: 45
+}
 
 export const DASHBOARD_PAGES = {
   INVOICES: {

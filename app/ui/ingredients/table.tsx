@@ -1,19 +1,36 @@
-import { fetchFilteredIngredients } from "@/app/lib/ingredients/data";
-import { DeleteItemButton, UpdateItemButton } from "../dashboard/buttons";
-import { deleteIngredient } from "@/app/lib/ingredients/actions";
+"use client";
+import { UpdateItemButton } from "../dashboard/buttons";
 import { IngredientsTable as IngredientsTableType } from "@/app/lib/ingredients/definitions";
-import { DASHBOARD_PAGES } from "@/app/lib/consts";
+import { DASHBOARD_PAGES, ICON_SIZE } from "@/app/lib/consts";
 import { formatCurrency } from "@/app/lib/utils";
 import Image from "next/image";
 
-export default async function IngredientsTable({
-  query,
-  currentPage,
-}: {
-  query: string;
-  currentPage: number;
-}) {
-  const ingredients = await fetchFilteredIngredients(query, currentPage);
+import { useEffect } from "react";
+import {
+  fetchIngredients,
+  deleteIngredientById,
+} from "@/lib/slices/ingredientsSlice";
+import { useSearchParams } from "next/navigation";
+import { TableSkeleton } from "../skeletons";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { TrashIcon } from "@heroicons/react/24/outline";
+
+export default function IngredientsTable() {
+  const { ingredients, loading } = useAppSelector(
+    (state) => state.ingredientsState
+  );
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(fetchIngredients());
+  }, [dispatch]);
+  const searchParams = useSearchParams();
+  const query = searchParams?.get("query") || "";
+  const filteredIngredients = ingredients.filter((i) =>
+    i.name.toLowerCase().includes(query.toLowerCase())
+  );
+  const iconSize = ICON_SIZE.MD;
+  const onDeleteIngredient = (id: string) => () =>
+    dispatch(deleteIngredientById(id));
 
   const TableItem = ({ item }: { item: IngredientsTableType }) => (
     <tr
@@ -22,13 +39,15 @@ export default async function IngredientsTable({
     >
       <td className="whitespace-nowrap py-3 pl-6 pr-3">
         <div className="flex items-center gap-3">
-        {item.imageUrl !== "none" && <Image
-            src={item.imageUrl}
-            height={44}
-            width={44}
-            alt={`${item.name}'s icon`}
-            style={{objectFit: 'contain', maxHeight: '44px'}}
-          />}
+          {item.imageUrl !== "none" && (
+            <Image
+              src={item.imageUrl}
+              height={iconSize}
+              width={iconSize}
+              alt={`${item.name}'s icon`}
+              style={{ objectFit: "contain" }}
+            />
+          )}
           <p>{item.name}</p>
         </div>
       </td>
@@ -42,10 +61,13 @@ export default async function IngredientsTable({
             id={item.id}
             parentPath={DASHBOARD_PAGES.INGREDIENTS.PATH}
           />
-          <DeleteItemButton
-            id={item.id}
-            onDelete={deleteIngredient.bind(null, item.id)}
-          />
+          <button
+            className="rounded-md border p-2 hover:bg-gray-100"
+            onClick={onDeleteIngredient(item.id)}
+          >
+            <span className="sr-only">Delete</span>
+            <TrashIcon className="w-5" />
+          </button>
         </div>
       </td>
     </tr>
@@ -70,21 +92,26 @@ export default async function IngredientsTable({
             id={item.id}
             parentPath={DASHBOARD_PAGES.INGREDIENTS.PATH}
           />
-          <DeleteItemButton
-            id={item.id}
-            onDelete={deleteIngredient.bind(null, item.id)}
-          />
+          <button
+            className="rounded-md border p-2 hover:bg-gray-100"
+            onClick={onDeleteIngredient(item.id)}
+          >
+            <span className="sr-only">Delete</span>
+            <TrashIcon className="w-5" />
+          </button>
         </div>
       </div>
     </div>
   );
 
-  return (
+  return loading ? (
+    <TableSkeleton />
+  ) : (
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
           <div className="md:hidden">
-            {ingredients?.map((item) => (
+            {filteredIngredients?.map((item) => (
               <TableMobileItem key={item.id} item={item} />
             ))}
           </div>
@@ -106,7 +133,7 @@ export default async function IngredientsTable({
               </tr>
             </thead>
             <tbody className="bg-white">
-              {ingredients?.map((item) => (
+              {filteredIngredients?.map((item) => (
                 <TableItem key={item.id} item={item} />
               ))}
             </tbody>
