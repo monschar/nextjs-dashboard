@@ -9,7 +9,6 @@ import {
   GridRowModel,
   GridValidRowModel,
 } from "@mui/x-data-grid";
-import Paper from "@mui/material/Paper";
 import { formatCurrency } from "@/app/lib/utils";
 import Image from "next/image";
 import { Ingredient } from "@/app/lib/ingredients/definitions";
@@ -77,22 +76,21 @@ export default function IngredientTable({
   ingredientData: Ingredient[];
 }) {
   return (
-    <Paper sx={{ height: 1400, width: "100%" }}>
-      <DataGrid
-        rows={ingredientData}
-        columns={columns}
-        columnVisibilityModel={{ id: false, imageUrl: false }}
-        initialState={{
-          sorting: {
-            sortModel: [{ field: "name", sort: "asc" }],
-          },
-          pagination: { paginationModel },
-        }}
-        processRowUpdate={handleProcessRowUpdate}
-        onProcessRowUpdateError={(error) => {
-          alert(error.message);
-        }}
-      />
-    </Paper>
+    <DataGrid
+      sx={{ height: 1400, width: "100%" }}
+      rows={ingredientData}
+      columns={columns}
+      columnVisibilityModel={{ id: false, imageUrl: false }}
+      initialState={{
+        sorting: {
+          sortModel: [{ field: "name", sort: "asc" }],
+        },
+        pagination: { paginationModel },
+      }}
+      processRowUpdate={handleProcessRowUpdate}
+      onProcessRowUpdateError={(error) => {
+        alert(error.message);
+      }}
+    />
   );
 }

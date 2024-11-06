@@ -7,10 +7,8 @@ import {
   GridRenderCellParams,
   GridValidRowModel,
 } from "@mui/x-data-grid";
-import Paper from "@mui/material/Paper";
 import { RecipesTable } from "@/app/lib/recipes/definitions";
 import { formatCurrency } from "@/app/lib/utils";
-import { Checkbox } from "@mui/material";
 import { updateRecipeActive } from "@/app/lib/recipes/actions";
 import Image from "next/image";
 
@@ -90,7 +88,8 @@ const columns: GridColDef[] = [
     type: "boolean",
     headerName: "Active",
     renderCell: (params: GridRenderCellParams<GridValidRowModel, boolean>) => (
-      <Checkbox
+      <input
+        type="checkbox"
         checked={params.value}
         onClick={() => updateRecipeActive(params.row.id)}
       />
@@ -109,18 +108,17 @@ export default function MegaTable({
   recipeData: RecipesTable[];
 }) {
   return (
-    <Paper sx={{ height: 1000, width: "100%" }}>
-      <DataGrid
-        rows={recipeData}
-        columns={columns}
-        columnVisibilityModel={{ id: false, imageUrl: false }}
-        initialState={{
-          sorting: {
-            sortModel: [{ field: "active", sort: "desc" }],
-          },
-          pagination: { paginationModel },
-        }}
-      />
-    </Paper>
+    <DataGrid
+      sx={{ height: 1000, width: "100%" }}
+      rows={recipeData}
+      columns={columns}
+      columnVisibilityModel={{ id: false, imageUrl: false }}
+      initialState={{
+        sorting: {
+          sortModel: [{ field: "active", sort: "desc" }],
+        },
+        pagination: { paginationModel },
+      }}
+    />
   );
 }
