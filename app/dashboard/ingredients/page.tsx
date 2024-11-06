@@ -15,14 +15,18 @@ export default async function Page() {
         </h1>
       </div>
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-        <Search placeholder={`Search ${DASHBOARD_PAGES.INGREDIENTS.NAME}...`} />
+        <Suspense fallback={<TableSkeleton />}>
+          <Search
+            placeholder={`Search ${DASHBOARD_PAGES.INGREDIENTS.NAME}...`}
+          />
+        </Suspense>
         <CreateItemButton
           parentPath={DASHBOARD_PAGES.INGREDIENTS.PATH}
           buttonText={`Create ${DASHBOARD_PAGES.INGREDIENTS.NAME}`}
         />
       </div>
       <Suspense fallback={<TableSkeleton />}>
-        <Table/>
+        <Table />
       </Suspense>
     </div>
   );
