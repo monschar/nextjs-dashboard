@@ -24,7 +24,6 @@ export default async function IngredientChart() {
   if (!activeIngredients || activeIngredients.length === 0) {
     return <p className="mt-4 text-gray-400">No data available.</p>;
   }
-  console.log("activeIngredients", activeIngredients);
   return (
     <div className="">
       {/* NOTE: Uncomment this code in Chapter 7 */}
