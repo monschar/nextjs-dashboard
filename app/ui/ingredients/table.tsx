@@ -1,36 +1,45 @@
 "use client";
-import { UpdateItemButton } from "../dashboard/buttons";
-import { IngredientsTable as IngredientsTableType } from "@/app/lib/ingredients/definitions";
+import { Ingredient as IngredientsTableType } from "@/app/lib/ingredients/definitions";
 import { DASHBOARD_PAGES, ICON_SIZE } from "@/app/lib/consts";
 import { formatCurrency } from "@/app/lib/utils";
 import Image from "next/image";
-
 import { useEffect } from "react";
 import {
   fetchIngredients,
   deleteIngredientById,
+  updateCurrentIngredient,
 } from "@/lib/slices/ingredientsSlice";
 import { useSearchParams } from "next/navigation";
 import { TableSkeleton } from "../skeletons";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { TrashIcon } from "@heroicons/react/24/outline";
+import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
 
-export default function IngredientsTable() {
+const iconSize = ICON_SIZE.MD;
+
+export default function Ingredient() {
+  const dispatch = useAppDispatch();
+  const searchParams = useSearchParams();
+  const { PATH } = DASHBOARD_PAGES.INGREDIENTS;
+
   const { ingredients, loading } = useAppSelector(
     (state) => state.ingredientsState
   );
-  const dispatch = useAppDispatch();
+
   useEffect(() => {
     dispatch(fetchIngredients());
   }, [dispatch]);
-  const searchParams = useSearchParams();
+
   const query = searchParams?.get("query") || "";
   const filteredIngredients = ingredients.filter((i) =>
     i.name.toLowerCase().includes(query.toLowerCase())
   );
-  const iconSize = ICON_SIZE.MD;
+
   const onDeleteIngredient = (id: string) => () =>
     dispatch(deleteIngredientById(id));
+
+  const onEditIngredient = (ingredient: IngredientsTableType) => () =>
+    dispatch(updateCurrentIngredient(ingredient));
 
   const TableItem = ({ item }: { item: IngredientsTableType }) => (
     <tr
@@ -54,13 +63,15 @@ export default function IngredientsTable() {
       <td className="whitespace-nowrap px-3 py-3">
         {formatCurrency(item.price)}
       </td>
-      <td className="whitespace-nowrap px-3 py-3">{item.stock}</td>
       <td className="whitespace-nowrap py-3 pl-6 pr-3">
         <div className="flex justify-end gap-3">
-          <UpdateItemButton
-            id={item.id}
-            parentPath={DASHBOARD_PAGES.INGREDIENTS.PATH}
-          />
+          <Link
+            href={`/dashboard/${PATH}/edit?id=${item.id}`}
+            className="rounded-md border p-2 hover:bg-gray-100"
+            onClick={onEditIngredient(item)}
+          >
+            <PencilIcon className="w-5" />
+          </Link>
           <button
             className="rounded-md border p-2 hover:bg-gray-100"
             onClick={onDeleteIngredient(item.id)}
@@ -85,13 +96,15 @@ export default function IngredientsTable() {
       <div className="flex w-full items-center justify-between pt-4">
         <div>
           <p className="text-xl font-medium">{formatCurrency(item.price)}</p>
-          <p>{item.stock}</p>
         </div>
         <div className="flex justify-end gap-2">
-          <UpdateItemButton
-            id={item.id}
-            parentPath={DASHBOARD_PAGES.INGREDIENTS.PATH}
-          />
+          <Link
+            href={`/dashboard/${PATH}/${item.id}/edit`}
+            className="rounded-md border p-2 hover:bg-gray-100"
+            onClick={onEditIngredient(item)}
+          >
+            <PencilIcon className="w-5" />
+          </Link>
           <button
             className="rounded-md border p-2 hover:bg-gray-100"
             onClick={onDeleteIngredient(item.id)}
@@ -123,9 +136,6 @@ export default function IngredientsTable() {
                 </th>
                 <th scope="col" className="px-3 py-5 font-medium">
                   Price
-                </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  Stock
                 </th>
                 <th scope="col" className="relative py-3 pl-6 pr-3">
                   <span className="sr-only">Edit</span>

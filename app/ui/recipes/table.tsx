@@ -1,34 +1,57 @@
-import { fetchFilteredRecipes } from "@/app/lib/recipes/data";
-import { DeleteItemButton, UpdateItemButton } from "../dashboard/buttons";
-import { deleteRecipe } from "@/app/lib/recipes/actions";
-import { RecipesTable as IngredientsTableType } from "@/app/lib/recipes/definitions";
-import { DASHBOARD_PAGES } from "@/app/lib/consts";
-import { formatCurrency } from "@/app/lib/utils";
-import RecipeStatus from "./status";
-import Image from "next/image";
+"use client";
 
-export default async function RecipesTable({
-  query,
-  currentPage,
-}: {
-  query: string;
-  currentPage: number;
-}) {
+import { Recipe as RecipeTableType } from "@/app/lib/recipes/definitions";
+import { DASHBOARD_PAGES, ICON_SIZE } from "@/app/lib/consts";
+import { formatCurrency } from "@/app/lib/utils";
+import Image from "next/image";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
+import {
+  deleteRecipeById,
+  fetchRecipes,
+  updateCurrentRecipe,
+} from "@/lib/slices/recipesSlice";
+import Link from "next/link";
+import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { TableSkeleton } from "../skeletons";
+
+const iconSize = ICON_SIZE.L;
+
+export default function RecipesTable() {
+  const dispatch = useAppDispatch();
+  const searchParams = useSearchParams();
   const { PATH } = DASHBOARD_PAGES.RECIPES;
-  const data = await fetchFilteredRecipes(query, currentPage);
-  const TableItem = ({ item }: { item: IngredientsTableType }) => (
+
+  const { recipes, loading } = useAppSelector((state) => state.recipesState);
+
+  useEffect(() => {
+    dispatch(fetchRecipes());
+  }, [dispatch]);
+
+  const query = searchParams?.get("query") || "";
+  const filteredRecipes = recipes.filter((r) =>
+    r.name.toLowerCase().includes(query.toLowerCase())
+  );
+
+  const onDeleteRecipe = (id: string) => () => dispatch(deleteRecipeById(id));
+
+  const onEditRecipe = (ingredient: RecipeTableType) => () =>
+    dispatch(updateCurrentRecipe(ingredient));
+
+  const TableItem = ({ item }: { item: RecipeTableType }) => (
     <tr
       key={item.id}
       className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
     >
       <td className="whitespace-nowrap py-3 pl-6 pr-3">
-      <div className="flex items-center gap-3">
-         <Image
+        <div className="flex items-center gap-3">
+          <Image
             src={item.imageUrl}
-            height={44}
-            width={44}
+            height={iconSize}
+            width={iconSize}
             alt={`${item.name}'s icon`}
-            style={{objectFit: 'contain', maxHeight: '44px'}}
+            style={{ objectFit: "contain", maxHeight: iconSize }}
           />
           <p>{item.name}</p>
         </div>
@@ -41,22 +64,28 @@ export default async function RecipesTable({
       <td className="whitespace-nowrap px-3 py-3">{item.ingredient3 ?? "-"}</td>
       <td className="whitespace-nowrap px-3 py-3">{item.ingredient4 ?? "-"}</td>
       <td className="whitespace-nowrap px-3 py-3">{item.ingredient5 ?? "-"}</td>
-      <td className="whitespace-nowrap px-3 py-3">
-        <RecipeStatus active={item.active} />
-      </td>
       <td className="whitespace-nowrap py-3 pl-6 pr-3">
         <div className="flex justify-end gap-3">
-          <UpdateItemButton id={item.id} parentPath={PATH} />
-          <DeleteItemButton
-            id={item.id}
-            onDelete={deleteRecipe.bind(null, item.id)}
-          />
+          <Link
+            href={`/dashboard/${PATH}/edit?id=${item.id}`}
+            className="rounded-md border p-2 hover:bg-gray-100"
+            onClick={onEditRecipe(item)}
+          >
+            <PencilIcon className="w-5" />
+          </Link>
+          <button
+            className="rounded-md border p-2 hover:bg-gray-100"
+            onClick={onDeleteRecipe(item.id)}
+          >
+            <span className="sr-only">Delete</span>
+            <TrashIcon className="w-5" />
+          </button>
         </div>
       </td>
     </tr>
   );
 
-  const TableMobileItem = ({ item }: { item: IngredientsTableType }) => (
+  const TableMobileItem = ({ item }: { item: RecipeTableType }) => (
     <div key={item.id} className="mb-2 w-full rounded-md bg-white p-4">
       <div className="flex items-center justify-between border-b pb-4">
         <div>
@@ -64,7 +93,6 @@ export default async function RecipesTable({
             <p>{item.name}</p>
           </div>
         </div>
-        <RecipeStatus active={item.active} />
       </div>
       <div className="flex w-full items-center justify-between pt-4">
         <div>
@@ -76,22 +104,33 @@ export default async function RecipesTable({
           <p>{item.ingredient5 ?? "-"}</p>
         </div>
         <div className="flex justify-end gap-2">
-          <UpdateItemButton id={item.id} parentPath={PATH} />
-          <DeleteItemButton
-            id={item.id}
-            onDelete={deleteRecipe.bind(null, item.id)}
-          />
+          <Link
+            href={`/dashboard/${PATH}/${item.id}/edit`}
+            className="rounded-md border p-2 hover:bg-gray-100"
+            onClick={onEditRecipe(item)}
+          >
+            <PencilIcon className="w-5" />
+          </Link>
+          <button
+            className="rounded-md border p-2 hover:bg-gray-100"
+            onClick={onDeleteRecipe(item.id)}
+          >
+            <span className="sr-only">Delete</span>
+            <TrashIcon className="w-5" />
+          </button>
         </div>
       </div>
     </div>
   );
 
-  return (
+  return loading ? (
+    <TableSkeleton />
+  ) : (
     <div className="mt-6 flow-root">
       <div className="inline-block min-w-full align-middle">
         <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
           <div className="md:hidden">
-            {data?.map((item) => (
+            {filteredRecipes?.map((item) => (
               <TableMobileItem key={item.id} item={item} />
             ))}
           </div>
@@ -119,13 +158,10 @@ export default async function RecipesTable({
                 <th scope="col" className="px-3 py-5 font-medium">
                   Ingredient5
                 </th>
-                <th scope="col" className="px-3 py-5 font-medium">
-                  Active
-                </th>
               </tr>
             </thead>
             <tbody className="bg-white">
-              {data?.map((item) => (
+              {filteredRecipes?.map((item) => (
                 <TableItem key={item.id} item={item} />
               ))}
             </tbody>

@@ -1,22 +1,19 @@
 import {
-  createIngredient,
-  deleteIngredient,
-  updateIngredient,
-} from "@/app/lib/ingredients/actions";
-import {
-  fetchAllIngredients,
-  fetchIngredientById,
-} from "@/app/lib/ingredients/data";
+  createRecipe,
+  deleteRecipe,
+  updateRecipe,
+} from "@/app/lib/recipes/actions";
+import { fetchAllRecipes, fetchRecipeById } from "@/app/lib/recipes/data";
 import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
   try {
     const id = request.nextUrl.searchParams.get("id");
     if (!id) {
-      const data = await fetchAllIngredients();
+      const data = await fetchAllRecipes();
       return Response.json(data);
     } else {
-      const data = await fetchIngredientById(id);
+      const data = await fetchRecipeById(id);
       return Response.json(data);
     }
   } catch (error) {
@@ -25,9 +22,9 @@ export async function GET(request: NextRequest) {
 }
 export async function POST(request: Request) {
   try {
-    const { ingredient } = await request.json();
-    await createIngredient(ingredient);
-    return Response.json({ ingredient }, { status: 200 });
+    const { recipe } = await request.json();
+    await createRecipe(recipe);
+    return Response.json({ recipe }, { status: 200 });
   } catch (error) {
     return Response.json({ error }, { status: 500 });
   }
@@ -35,9 +32,9 @@ export async function POST(request: Request) {
 
 export async function PUT(request: Request) {
   try {
-    const { ingredient } = await request.json();
-    await updateIngredient(ingredient);
-    return Response.json({ ingredient }, { status: 200 });
+    const { recipe } = await request.json();
+    await updateRecipe(recipe);
+    return Response.json({ recipe }, { status: 200 });
   } catch (error) {
     console.log(error);
     return Response.json({ error }, { status: 500 });
@@ -47,7 +44,7 @@ export async function PUT(request: Request) {
 export async function DELETE(request: Request) {
   try {
     const { id } = await request.json();
-    await deleteIngredient(id);
+    await deleteRecipe(id);
     return Response.json({ id }, { status: 200 });
   } catch (error) {
     return Response.json({ error }, { status: 500 });

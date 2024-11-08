@@ -113,6 +113,7 @@ export const generateActiveIngredients = (
   return Array.from(activeIngredientMap.keys())
     .map((k) => ({
       ...ingredientsMap.get(k),
+      key: k,
       frequency: activeIngredientMap.get(k),
     }))
     .sort((a, b) => b.frequency - a.frequency || a.name - b.name);
@@ -126,7 +127,8 @@ export const categorizeActiveRecipes = (recipes: Recipe[]) => {
       .filter((r) => r.recipeStructure === k)
       .sort(
         (a, b) =>
-          itemLevelKeys.indexOf(a.itemLevel) - itemLevelKeys.indexOf(b.itemLevel)
+          itemLevelKeys.indexOf(a.itemLevel ?? "") -
+          itemLevelKeys.indexOf(b.itemLevel ?? "")
       ),
   }));
 };

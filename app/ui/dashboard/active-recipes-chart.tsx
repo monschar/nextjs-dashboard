@@ -1,10 +1,10 @@
 import { lusitana } from "@/app/ui/fonts";
-import { fetchActiveRecipes } from "@/app/lib/recipes/data";
 import Image from "next/image";
 import { Recipe } from "@/app/lib/recipes/definitions";
 import { ItemLevels } from "@/app/lib/consts";
 import { categorizeActiveRecipes } from "@/app/lib/utils";
 import clsx from "clsx";
+import { fetchAllRecipes } from "@/app/lib/recipes/data";
 
 // This component is representational only.
 // For data visualization UI, check out:
@@ -57,7 +57,7 @@ const ActiveRecipeStructureCard = ({
 };
 
 export default async function ActiveRecipeChart() {
-  const activeRecipes = await fetchActiveRecipes(); // Fetch data inside the component
+  const activeRecipes = await fetchAllRecipes(); // Fetch data inside the component
   const categorizedActiveRecipes = categorizeActiveRecipes(activeRecipes);
 
   return (

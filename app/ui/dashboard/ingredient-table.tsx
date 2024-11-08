@@ -4,7 +4,6 @@ import * as React from "react";
 import {
   DataGrid,
   GridColDef,
-  GridPreProcessEditCellProps,
   GridRenderCellParams,
   GridRowModel,
   GridValidRowModel,
@@ -12,7 +11,6 @@ import {
 import { formatCurrency } from "@/app/lib/utils";
 import Image from "next/image";
 import { Ingredient } from "@/app/lib/ingredients/definitions";
-import { updateIngredientStock } from "@/app/lib/ingredients/actions";
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "ID" },
@@ -47,26 +45,16 @@ const columns: GridColDef[] = [
       Number.parseInt(v1.slice(1)) - Number.parseInt(v2.slice(1)),
     editable: true,
   },
-  {
-    field: "stock",
-    headerName: "Stock",
-    flex: 1,
-    editable: true,
-    preProcessEditCellProps: (params: GridPreProcessEditCellProps) => {
-      const hasError = Number.isNaN(params.props.value);
-      return { ...params.props, error: hasError };
-    },
-  },
 ];
 
 const paginationModel = { page: 0, pageSize: 100 };
 
 const handleProcessRowUpdate = (newRow: GridRowModel) => {
-  const stock = Number.parseInt(newRow.stock);
-  if (!Number.isInteger(stock)) {
-    throw new Error("Stock must be an integer");
-  }
-  updateIngredientStock(newRow.id, newRow.stock);
+  // const stock = Number.parseInt(newRow.stock);
+  // if (!Number.isInteger(stock)) {
+  //   throw new Error("Stock must be an integer");
+  // }
+  // updateIngredientStock(newRow.id, newRow.stock);
   return newRow;
 };
 

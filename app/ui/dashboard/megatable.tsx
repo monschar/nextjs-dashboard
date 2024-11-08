@@ -9,7 +9,6 @@ import {
 } from "@mui/x-data-grid";
 import { RecipesTable } from "@/app/lib/recipes/definitions";
 import { formatCurrency } from "@/app/lib/utils";
-import { updateRecipeActive } from "@/app/lib/recipes/actions";
 import Image from "next/image";
 
 const columns: GridColDef[] = [
@@ -83,21 +82,6 @@ const columns: GridColDef[] = [
     },
     flex: 1,
   },
-  {
-    field: "active",
-    type: "boolean",
-    headerName: "Active",
-    renderCell: (params: GridRenderCellParams<GridValidRowModel, boolean>) => (
-      <input
-        type="checkbox"
-        checked={params.value}
-        onClick={() => updateRecipeActive(params.row.id)}
-      />
-    ),
-    flex: 1,
-    headerAlign: "left",
-    align: "left",
-  },
 ];
 
 const paginationModel = { page: 0, pageSize: 50 };
@@ -115,7 +99,7 @@ export default function MegaTable({
       columnVisibilityModel={{ id: false, imageUrl: false }}
       initialState={{
         sorting: {
-          sortModel: [{ field: "active", sort: "desc" }],
+          sortModel: [],
         },
         pagination: { paginationModel },
       }}

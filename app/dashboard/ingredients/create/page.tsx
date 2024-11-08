@@ -19,7 +19,7 @@ export default async function Page() {
           },
         ]}
       />
-      <Form formProps={{ formActionType: FormActionType.Create }} />
+      <Form formActionType={FormActionType.Create} />
     </main>
   );
 }
