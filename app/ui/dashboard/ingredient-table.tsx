@@ -10,14 +10,18 @@ import {
 } from "@mui/x-data-grid";
 import { formatCurrency } from "@/app/lib/utils";
 import Image from "next/image";
-import { Ingredient } from "@/app/lib/ingredients/definitions";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { updateIngredientLocal } from "@/lib/slices/rootSlice";
+import { IngredientLocal } from "@/app/lib/ingredients/definitions";
 
 const columns: GridColDef[] = [
-  { field: "id", headerName: "ID" },
-  { field: "imageUrl", headerName: "Image Url" },
+  { field: "id", headerName: "ID", type: "string" },
+  { field: "imageUrl", headerName: "Image Url", type: "string" },
+  { field: "sequence", headerName: "Sequence", type: "number" },
   {
     field: "name",
     headerName: "Name",
+    type: "string",
     flex: 1,
     renderCell: (params: GridRenderCellParams<GridValidRowModel, string>) => (
       <div className="flex items-center gap-3">
@@ -32,43 +36,45 @@ const columns: GridColDef[] = [
       </div>
     ),
   },
+  { field: "itemLevel", headerName: "Item Level", type: "string", flex: 0.5 },
   {
     field: "price",
     headerName: "Price",
-    valueGetter: (value) => {
+    type: "number",
+    valueFormatter: (value) => {
       return formatCurrency(value);
     },
-    flex: 1,
+    flex: 0.5,
     headerAlign: "left",
     align: "left",
-    sortComparator: (v1, v2) =>
-      Number.parseInt(v1.slice(1)) - Number.parseInt(v2.slice(1)),
+    editable: true,
+  },
+  {
+    field: "stock",
+    headerName: "Stock",
+    type: "number",
+    flex: 0.5,
+    headerAlign: "left",
+    align: "left",
     editable: true,
   },
 ];
 
 const paginationModel = { page: 0, pageSize: 100 };
 
-const handleProcessRowUpdate = (newRow: GridRowModel) => {
-  // const stock = Number.parseInt(newRow.stock);
-  // if (!Number.isInteger(stock)) {
-  //   throw new Error("Stock must be an integer");
-  // }
-  // updateIngredientStock(newRow.id, newRow.stock);
-  return newRow;
-};
-
-export default function IngredientTable({
-  ingredientData,
-}: {
-  ingredientData: Ingredient[];
-}) {
+export default function IngredientTable({}) {
+  const { ingredients } = useAppSelector((state) => state.rootState);
+  const dispatch = useAppDispatch();
+  const handleProcessRowUpdate = (newRow: GridRowModel<IngredientLocal>) => {
+    dispatch(updateIngredientLocal(newRow));
+    return newRow;
+  };
   return (
     <DataGrid
-      sx={{ height: 1400, width: "100%" }}
-      rows={ingredientData}
+      sx={{ height: "60vh", width: "100%" }}
+      rows={ingredients}
       columns={columns}
-      columnVisibilityModel={{ id: false, imageUrl: false }}
+      columnVisibilityModel={{ id: false, imageUrl: false, sequence: false }}
       initialState={{
         sorting: {
           sortModel: [{ field: "name", sort: "asc" }],

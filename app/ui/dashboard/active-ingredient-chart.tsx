@@ -1,9 +1,9 @@
+"use client";
 import { lusitana } from "@/app/ui/fonts";
-import { fetchAllIngredients } from "@/app/lib/ingredients/data";
 import Image from "next/image";
-import { generateActiveIngredients } from "@/app/lib/utils";
+import { getActiveIngredients } from "@/app/lib/utils";
 import clsx from "clsx";
-import { fetchActiveRecipes } from "@/app/lib/recipes/data";
+import { useAppSelector } from "@/lib/hooks";
 
 // This component is representational only.
 // For data visualization UI, check out:
@@ -11,23 +11,12 @@ import { fetchActiveRecipes } from "@/app/lib/recipes/data";
 // https://www.chartjs.org/
 // https://airbnb.io/visx/
 
-export default async function IngredientChart() {
-  const activeRecipes = await fetchActiveRecipes(); // Fetch data inside the component
-  const allIngredients = await fetchAllIngredients();
-  const activeIngredients = generateActiveIngredients(
-    activeRecipes,
-    allIngredients
-  );
+export default function ActiveIngredientChart() {
+  const { recipes, ingredients } = useAppSelector((state) => state.rootState);
+  const activeIngredients = getActiveIngredients(recipes, ingredients);
   const rowHeight = 25;
-  // NOTE: Uncomment this code in Chapter 7
-
-  if (!activeIngredients || activeIngredients.length === 0) {
-    return <p className="mt-4 text-gray-400">No data available.</p>;
-  }
   return (
     <div className="">
-      {/* NOTE: Uncomment this code in Chapter 7 */}
-
       <div className="rounded-xl bg-gray-50 p-4">
         <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
           Active Ingredients
@@ -37,12 +26,12 @@ export default async function IngredientChart() {
             <div key={i.id} className={clsx("flex flex-1 items-center gap-2")}>
               <div
                 className={clsx("flex w-40 gap-2", {
-                  // "bg-rose-100": i.stock < i.frequency * 5,
+                  "bg-rose-100": i.stock < i.frequency * 5,
                 })}
               >
-                {/* <p className="w-5 text-sm flex items-center justify-center">
+                <p className="w-5 text-sm flex items-center justify-center">
                   {`${i.stock}`}
-                </p> */}
+                </p>
                 <Image
                   src={i.imageUrl}
                   height={rowHeight}

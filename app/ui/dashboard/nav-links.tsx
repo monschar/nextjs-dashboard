@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  HomeIcon,
-  DocumentDuplicateIcon,
-  CakeIcon,
-  BugAntIcon,
-} from "@heroicons/react/24/outline";
+import { HomeIcon, CakeIcon, BugAntIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
@@ -15,11 +10,6 @@ import { DASHBOARD_PAGES } from "@/app/lib/consts";
 // Depending on the size of the application, this would be stored in a database.
 const links = [
   { name: "Home", href: "/dashboard", icon: HomeIcon },
-  {
-    name: "Invoices",
-    href: "/dashboard/invoices",
-    icon: DocumentDuplicateIcon,
-  },
   {
     name: DASHBOARD_PAGES.INGREDIENTS.NAME,
     href: `/dashboard/${DASHBOARD_PAGES.INGREDIENTS.PATH}`,

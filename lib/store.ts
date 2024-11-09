@@ -1,13 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
 import ingredientReducer from "./slices/ingredientsSlice";
 import recipeReducer from "./slices/recipesSlice";
+import rootReducer from "./slices/rootSlice";
+import logger from "redux-logger";
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       ingredientsState: ingredientReducer,
       recipesState: recipeReducer,
+      rootState: rootReducer,
     },
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
   });
 };
 

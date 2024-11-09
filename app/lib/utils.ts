@@ -1,7 +1,7 @@
 import { ItemLevels, RecipeStructure } from "./consts";
 import { Revenue } from "./definitions";
-import { Ingredient, IngredientsChart } from "./ingredients/definitions";
-import { Recipe } from "./recipes/definitions";
+import { IngredientLocal, IngredientChart } from "./ingredients/definitions";
+import { RecipeLocal } from "./recipes/definitions";
 
 export const formatCurrency = (amount: number) => {
   return amount.toLocaleString("en-US", {
@@ -90,26 +90,28 @@ export const getOptionsFromEnum = (e: object) => {
   return res;
 };
 
-export const generateActiveIngredients = (
-  recipes: Recipe[],
-  ingredients: Ingredient[]
-): IngredientsChart[] => {
+export const getActiveIngredients = (
+  recipes: RecipeLocal[],
+  ingredients: IngredientLocal[]
+): IngredientChart[] => {
   const ingredientsMap = new Map();
-  ingredients.forEach((i) => ingredientsMap.set(i.id, i));
+  ingredients.forEach((i) => ingredientsMap.set(i.name, i));
   const activeIngredientMap = new Map();
-  recipes.forEach((r) => {
-    const ingredients = [
-      r.ingredient1,
-      r.ingredient2,
-      r.ingredient3,
-      r.ingredient4,
-      r.ingredient5,
-    ].filter((i) => i);
-    for (const i of ingredients) {
-      if (!activeIngredientMap.has(i)) activeIngredientMap.set(i, 0);
-      activeIngredientMap.set(i, activeIngredientMap.get(i) + 1);
-    }
-  });
+  recipes
+    .filter((r) => r.active)
+    .forEach((r) => {
+      const ingredients = [
+        r.ingredient1,
+        r.ingredient2,
+        r.ingredient3,
+        r.ingredient4,
+        r.ingredient5,
+      ].filter((i) => i);
+      for (const i of ingredients) {
+        if (!activeIngredientMap.has(i)) activeIngredientMap.set(i, 0);
+        activeIngredientMap.set(i, activeIngredientMap.get(i) + 1);
+      }
+    });
   return Array.from(activeIngredientMap.keys())
     .map((k) => ({
       ...ingredientsMap.get(k),
@@ -119,7 +121,7 @@ export const generateActiveIngredients = (
     .sort((a, b) => b.frequency - a.frequency || a.name - b.name);
 };
 
-export const categorizeActiveRecipes = (recipes: Recipe[]) => {
+export const categorizeRecipes = (recipes: RecipeLocal[]) => {
   const itemLevelKeys = Object.keys(ItemLevels);
   return Object.keys(RecipeStructure).map((k) => ({
     title: constToReadable(k),

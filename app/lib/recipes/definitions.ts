@@ -23,6 +23,33 @@ export type Recipe = {
   imageUrl: string;
 };
 
+export type RecipeData = {
+  id: string;
+  name: string;
+  price: number;
+  ingredient1: string | null;
+  ingredient2: string | null;
+  ingredient3: string | null;
+  ingredient4: string | null;
+  ingredient5: string | null;
+  itemLevel: ItemLevels;
+  recipeStructure: RecipeStructure;
+  recipeType: RecipeTypes;
+  recipeLabel: RecipeLabels;
+  cookingAppliance: CookingAppliances;
+  imageUrl: string;
+};
+
+export type RecipeLocal = RecipeData & {
+  active: boolean;
+  price: number;
+  ingredient1: string | null;
+  ingredient2: string | null;
+  ingredient3: string | null;
+  ingredient4: string | null;
+  ingredient5: string | null;
+};
+
 export type RecipesTable = {
   id: string;
   name: string;

@@ -2,8 +2,8 @@ export const ITEMS_PER_PAGE = 100;
 export const ICON_SIZE = {
   SM: 25,
   MD: 35,
-  L: 45
-}
+  L: 45,
+};
 
 export const DASHBOARD_PAGES = {
   INVOICES: {
@@ -41,7 +41,7 @@ export enum ItemLevels {
   COMMON = "COMMON",
   RARE = "RARE",
   EPIC = "EPIC",
-  LEGENDARY = "LEGENDARY"
+  LEGENDARY = "LEGENDARY",
 }
 
 export enum RecipeStructure {
@@ -77,3 +77,8 @@ export enum CookingAppliances {
   STEAMER = "STEAMER",
   STOVE = "STOVE",
 }
+
+export const LocalStorageKeys = {
+  RECIPES: "recipes",
+  INGREDIENTS: "ingredients",
+};

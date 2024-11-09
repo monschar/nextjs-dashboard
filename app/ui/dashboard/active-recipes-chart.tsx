@@ -1,76 +1,63 @@
+"use client";
 import { lusitana } from "@/app/ui/fonts";
 import Image from "next/image";
-import { Recipe } from "@/app/lib/recipes/definitions";
+import { RecipeLocal } from "@/app/lib/recipes/definitions";
 import { ItemLevels } from "@/app/lib/consts";
-import { categorizeActiveRecipes } from "@/app/lib/utils";
+import { categorizeRecipes } from "@/app/lib/utils";
 import clsx from "clsx";
-import { fetchAllRecipes } from "@/app/lib/recipes/data";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { updateRecipeActive } from "@/lib/slices/rootSlice";
+import { Add, Remove } from "@mui/icons-material";
+import { PlusIcon } from "@heroicons/react/20/solid";
+import { useEffect, useState } from "react";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
-// This component is representational only.
-// For data visualization UI, check out:
-// https://www.tremor.so/
-// https://www.chartjs.org/
-// https://airbnb.io/visx/
+export default function ActiveRecipeChart() {
+  const { recipes } = useAppSelector((state) => state.rootState);
+  const activeRecipes = recipes.filter((r) => r.active);
+  const categorizedActiveRecipes = categorizeRecipes(activeRecipes);
 
-const ActiveRecipeRecord = ({ recipe }: { recipe: Recipe }) => (
-  <div
-    key={recipe.id}
-    className={clsx(
-      "flex flex-1 items-center gap-2 p-1 rounded-md border border-1 border-white",
-      {
-        "hover:bg-sky-300 bg-sky-200": recipe.itemLevel === ItemLevels.COMMON,
-        "hover:bg-teal-300 bg-teal-200": recipe.itemLevel === ItemLevels.RARE,
-        "hover:bg-amber-300 bg-amber-200": recipe.itemLevel === ItemLevels.EPIC,
-        "hover:bg-rose-300 bg-rose-200":
-          recipe.itemLevel === ItemLevels.LEGENDARY,
-      }
-    )}
-  >
-    <Image
-      src={recipe.imageUrl}
-      height={25}
-      width={25}
-      alt={`${recipe.name}'s icon`}
-      style={{ objectFit: "contain", height: "28px", width: "28px" }}
-    />
-    <p className="text-sm flex items-center justify-center">
-      {`${recipe.name}`}
-    </p>
-  </div>
-);
+  const [open, setOpen] = useState(false);
+  const [filteredRecipes, setFilteredRecipes] = useState<RecipeLocal[]>([]);
 
-const ActiveRecipeStructureCard = ({
-  title,
-  recipes,
-}: {
-  title: string;
-  recipes: Recipe[];
-}) => {
-  return (
-    <div className="justify-start rounded-xl bg-white p-4 shadow-sm">
-      <h5 className={`${lusitana.className} mb-4 text-xl`}>{title}</h5>
-      {recipes.map((ar) => (
-        <ActiveRecipeRecord key={ar.id} recipe={ar} />
-      ))}
-    </div>
-  );
-};
+  const handleOpen = () => {
+    setOpen(true);
+  };
 
-export default async function ActiveRecipeChart() {
-  const activeRecipes = await fetchAllRecipes(); // Fetch data inside the component
-  const categorizedActiveRecipes = categorizeActiveRecipes(activeRecipes);
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSearch = (query: string) => {
+    setFilteredRecipes(
+      recipes.filter((r) => r.name.toLowerCase().includes(query.toLowerCase()))
+    );
+  };
+
+  useEffect(() => {
+    setFilteredRecipes(recipes);
+  }, [recipes]);
 
   return (
-    <div className="">
-      {/* NOTE: Uncomment this code in Chapter 7 */}
-
+    <div className="grid grid-cols-1">
       <div className="rounded-xl bg-gray-50 p-4">
-        <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
-          Active Recipes
-        </h2>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="flex justify-between mb-4 ">
+          <h2 className={`${lusitana.className} text-xl md:text-2xl`}>
+            Active Recipes
+          </h2>
+          <button
+            onClick={handleOpen}
+            className="flex h-10 items-center rounded-lg bg-blue-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          >
+            <span className="hidden md:block">Add active recipes</span>
+            <PlusIcon className="h-5 md:ml-4" />
+          </button>
+        </div>
+
+        <div className="grid grid-cols-4 gap-3">
           {categorizedActiveRecipes.map((car) => (
-            <ActiveRecipeStructureCard
+            <RecipeStructureCard
               key={car.title}
               recipes={car.list}
               title={car.title}
@@ -78,6 +65,106 @@ export default async function ActiveRecipeChart() {
           ))}
         </div>
       </div>
+
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        scroll={"paper"}
+        aria-labelledby="scroll-dialog-title"
+        aria-describedby="scroll-dialog-description"
+        fullWidth
+      >
+        <DialogTitle>
+          <p>All Recipes</p>
+          <SearchBar handleSearch={handleSearch} />
+        </DialogTitle>
+        <DialogContent>
+          {filteredRecipes.map((ar) => (
+            <RecipeRecord key={ar.id} recipe={ar} />
+          ))}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
+
+const RecipeRecord = ({ recipe }: { recipe: RecipeLocal }) => {
+  const dispatch = useAppDispatch();
+  return (
+    <div
+      key={recipe.id}
+      className={clsx(
+        "flex items-center gap-2 p-1 rounded-md border border-1 border-white",
+        {
+          "hover:bg-sky-300 bg-sky-200": recipe.itemLevel === ItemLevels.COMMON,
+          "hover:bg-teal-300 bg-teal-200": recipe.itemLevel === ItemLevels.RARE,
+          "hover:bg-amber-300 bg-amber-200":
+            recipe.itemLevel === ItemLevels.EPIC,
+          "hover:bg-rose-300 bg-rose-200":
+            recipe.itemLevel === ItemLevels.LEGENDARY,
+        }
+      )}
+    >
+      <Image
+        src={recipe.imageUrl}
+        height={25}
+        width={25}
+        alt={`${recipe.name}'s icon`}
+        style={{ objectFit: "contain", height: "28px", width: "28px" }}
+      />
+      <p className="text-sm flex-1 items-center justify-center">
+        {`${recipe.name}`}
+      </p>
+      {recipe.active ? (
+        <Remove
+          className="hover:cursor-pointer"
+          onClick={() => dispatch(updateRecipeActive({ id: recipe.id }))}
+        />
+      ) : (
+        <Add
+          className="hover:cursor-pointer"
+          onClick={() => dispatch(updateRecipeActive({ id: recipe.id }))}
+        />
+      )}
+    </div>
+  );
+};
+
+const RecipeStructureCard = ({
+  title,
+  recipes,
+}: {
+  title: string;
+  recipes: RecipeLocal[];
+}) => {
+  return (
+    <div className="justify-start rounded-xl bg-white p-4 shadow-sm">
+      <h5 className={`${lusitana.className} mb-4 text-xl`}>{title}</h5>
+      {recipes.map((ar) => (
+        <RecipeRecord key={ar.id} recipe={ar} />
+      ))}
+    </div>
+  );
+};
+
+const SearchBar = ({
+  handleSearch,
+}: {
+  handleSearch: (query: string) => void;
+}) => {
+  return (
+    <div className="relative flex flex-1 flex-shrink-0">
+      <label htmlFor="search" className="sr-only">
+        Search
+      </label>
+      <input
+        className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+        placeholder={"Search recipes"}
+        onChange={(e) => {
+          handleSearch(e.target.value);
+        }}
+      />
+      <MagnifyingGlassIcon className="absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+    </div>
+  );
+};
