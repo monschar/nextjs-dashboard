@@ -5,6 +5,7 @@ import {
   RecipeStructure,
   RecipeTypes,
 } from "../consts";
+import { IngredientData } from "../ingredients/definitions";
 
 export type Recipe = {
   id: string;
@@ -43,11 +44,17 @@ export type RecipeData = {
 export type RecipeLocal = RecipeData & {
   active: boolean;
   price: number;
-  ingredient1: string | null;
-  ingredient2: string | null;
-  ingredient3: string | null;
-  ingredient4: string | null;
-  ingredient5: string | null;
+};
+
+export type RecipeWithIngredient = Omit<
+  RecipeLocal,
+  "ingredient1" | "ingredient2" | "ingredient3" | "ingredient4" | "ingredient5"
+> & {
+  ingredient1: IngredientData | undefined;
+  ingredient2: IngredientData | undefined;
+  ingredient3: IngredientData | undefined;
+  ingredient4: IngredientData | undefined;
+  ingredient5: IngredientData | undefined;
 };
 
 export type RecipesTable = {

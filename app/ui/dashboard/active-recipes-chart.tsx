@@ -1,7 +1,10 @@
 "use client";
 import { lusitana } from "@/app/ui/fonts";
 import Image from "next/image";
-import { RecipeLocal } from "@/app/lib/recipes/definitions";
+import {
+  RecipeLocal,
+  RecipeWithIngredient,
+} from "@/app/lib/recipes/definitions";
 import { ItemLevels } from "@/app/lib/consts";
 import { categorizeRecipes } from "@/app/lib/utils";
 import clsx from "clsx";
@@ -12,14 +15,36 @@ import { Add, Remove } from "@mui/icons-material";
 import { PlusIcon } from "@heroicons/react/20/solid";
 import { useEffect, useState } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { IngredientLocal } from "@/app/lib/ingredients/definitions";
+
+const mapIngredientToRecipe = (
+  ingredients: IngredientLocal[],
+  recipes: RecipeLocal[]
+): RecipeWithIngredient[] => {
+  return recipes.map((r) => {
+    return {
+      ...r,
+      ingredient1: ingredients.find((i) => i.name === r.ingredient1),
+      ingredient2: ingredients.find((i) => i.name === r.ingredient2),
+      ingredient3: ingredients.find((i) => i.name === r.ingredient3),
+      ingredient4: ingredients.find((i) => i.name === r.ingredient4),
+      ingredient5: ingredients.find((i) => i.name === r.ingredient5),
+    };
+  });
+};
 
 export default function ActiveRecipeChart() {
-  const { recipes } = useAppSelector((state) => state.rootState);
-  const activeRecipes = recipes.filter((r) => r.active);
-  const categorizedActiveRecipes = categorizeRecipes(activeRecipes);
-
+  const { recipes, ingredients } = useAppSelector((state) => state.rootState);
+  const [mappedRecipes, setMappedRecipes] = useState<RecipeWithIngredient[]>(
+    []
+  );
   const [open, setOpen] = useState(false);
-  const [filteredRecipes, setFilteredRecipes] = useState<RecipeLocal[]>([]);
+  const [filteredRecipes, setFilteredRecipes] = useState<
+    RecipeWithIngredient[]
+  >([]);
+
+  const activeRecipes = mappedRecipes.filter((r) => r.active);
+  const categorizedActiveRecipes = categorizeRecipes(activeRecipes);
 
   const handleOpen = () => {
     setOpen(true);
@@ -31,13 +56,20 @@ export default function ActiveRecipeChart() {
 
   const handleSearch = (query: string) => {
     setFilteredRecipes(
-      recipes.filter((r) => r.name.toLowerCase().includes(query.toLowerCase()))
+      mappedRecipes.filter((r) =>
+        r.name.toLowerCase().includes(query.toLowerCase())
+      )
     );
   };
 
   useEffect(() => {
-    setFilteredRecipes(recipes);
-  }, [recipes]);
+    const result = mapIngredientToRecipe(ingredients, recipes);
+    setMappedRecipes(result);
+  }, [ingredients, recipes]);
+
+  useEffect(() => {
+    setFilteredRecipes(mappedRecipes);
+  }, [mappedRecipes]);
 
   return (
     <div className="grid grid-cols-1">
@@ -88,8 +120,28 @@ export default function ActiveRecipeChart() {
   );
 }
 
-const RecipeRecord = ({ recipe }: { recipe: RecipeLocal }) => {
+const RecipeRecord = ({ recipe }: { recipe: RecipeWithIngredient }) => {
   const dispatch = useAppDispatch();
+  const { ingredient1, ingredient2, ingredient3, ingredient4, ingredient5 } =
+    recipe;
+  const ingredient1Price = ingredient1?.price ?? 0;
+  const ingredient2Price = ingredient2?.price ?? 0;
+  const ingredient3Price = ingredient3?.price ?? 0;
+  const ingredient4Price = ingredient4?.price ?? 0;
+  const ingredient5Price = ingredient5?.price ?? 0;
+  const profit =
+    ingredient1Price < 0 ||
+    ingredient2Price < 0 ||
+    ingredient3Price < 0 ||
+    ingredient4Price < 0 ||
+    ingredient5Price < 0
+      ? "?"
+      : recipe.price -
+        ingredient1Price -
+        ingredient2Price -
+        ingredient3Price -
+        ingredient4Price -
+        ingredient5Price;
   return (
     <div
       key={recipe.id}
@@ -115,6 +167,7 @@ const RecipeRecord = ({ recipe }: { recipe: RecipeLocal }) => {
       <p className="text-sm flex-1 items-center justify-center">
         {`${recipe.name}`}
       </p>
+      <p className="text-sm items-center justify-center">{`+$${profit} ($${recipe.price} )`}</p>
       {recipe.active ? (
         <Remove
           className="hover:cursor-pointer"
@@ -135,7 +188,7 @@ const RecipeStructureCard = ({
   recipes,
 }: {
   title: string;
-  recipes: RecipeLocal[];
+  recipes: RecipeWithIngredient[];
 }) => {
   return (
     <div className="justify-start rounded-xl bg-white p-4 shadow-sm">

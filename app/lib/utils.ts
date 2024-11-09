@@ -1,7 +1,7 @@
 import { ItemLevels, RecipeStructure } from "./consts";
 import { Revenue } from "./definitions";
 import { IngredientLocal, IngredientChart } from "./ingredients/definitions";
-import { RecipeLocal } from "./recipes/definitions";
+import { RecipeLocal, RecipeWithIngredient } from "./recipes/definitions";
 
 export const formatCurrency = (amount: number) => {
   return amount.toLocaleString("en-US", {
@@ -121,7 +121,7 @@ export const getActiveIngredients = (
     .sort((a, b) => b.frequency - a.frequency || a.name - b.name);
 };
 
-export const categorizeRecipes = (recipes: RecipeLocal[]) => {
+export const categorizeRecipes = (recipes: RecipeWithIngredient[]) => {
   const itemLevelKeys = Object.keys(ItemLevels);
   return Object.keys(RecipeStructure).map((k) => ({
     title: constToReadable(k),
