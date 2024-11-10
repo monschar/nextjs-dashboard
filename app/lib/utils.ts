@@ -3,7 +3,8 @@ import { Revenue } from "./definitions";
 import { IngredientLocal, IngredientChart } from "./ingredients/definitions";
 import { RecipeLocal, RecipeWithIngredient } from "./recipes/definitions";
 
-export const formatCurrency = (amount: number) => {
+export const formatCurrency = (amount: number | undefined) => {
+  if (!amount) return;
   return amount.toLocaleString("en-US", {
     style: "currency",
     currency: "USD",
@@ -133,4 +134,44 @@ export const categorizeRecipes = (recipes: RecipeWithIngredient[]) => {
           itemLevelKeys.indexOf(b.itemLevel ?? "")
       ),
   }));
+};
+
+export const calculateProfit = (recipe: RecipeWithIngredient) => {
+  const { ingredient1, ingredient2, ingredient3, ingredient4, ingredient5 } =
+    recipe;
+  const ingredient1Price = ingredient1?.price ?? 0;
+  const ingredient2Price = ingredient2?.price ?? 0;
+  const ingredient3Price = ingredient3?.price ?? 0;
+  const ingredient4Price = ingredient4?.price ?? 0;
+  const ingredient5Price = ingredient5?.price ?? 0;
+  const profit =
+    ingredient1Price < 0 ||
+    ingredient2Price < 0 ||
+    ingredient3Price < 0 ||
+    ingredient4Price < 0 ||
+    ingredient5Price < 0
+      ? 0
+      : recipe.price -
+        ingredient1Price -
+        ingredient2Price -
+        ingredient3Price -
+        ingredient4Price -
+        ingredient5Price;
+  return profit;
+};
+
+export const mapIngredientToRecipe = (
+  ingredients: IngredientLocal[],
+  recipes: RecipeLocal[]
+): RecipeWithIngredient[] => {
+  return recipes.map((r) => {
+    return {
+      ...r,
+      ingredient1: ingredients.find((i) => i.name === r.ingredient1),
+      ingredient2: ingredients.find((i) => i.name === r.ingredient2),
+      ingredient3: ingredients.find((i) => i.name === r.ingredient3),
+      ingredient4: ingredients.find((i) => i.name === r.ingredient4),
+      ingredient5: ingredients.find((i) => i.name === r.ingredient5),
+    };
+  });
 };

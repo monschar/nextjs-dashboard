@@ -1,12 +1,13 @@
 "use client";
 import { lusitana } from "@/app/ui/fonts";
 import Image from "next/image";
-import {
-  RecipeLocal,
-  RecipeWithIngredient,
-} from "@/app/lib/recipes/definitions";
+import { RecipeWithIngredient } from "@/app/lib/recipes/definitions";
 import { ItemLevels } from "@/app/lib/consts";
-import { categorizeRecipes } from "@/app/lib/utils";
+import {
+  calculateProfit,
+  categorizeRecipes,
+  mapIngredientToRecipe,
+} from "@/app/lib/utils";
 import clsx from "clsx";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
@@ -15,23 +16,6 @@ import { Add, Remove } from "@mui/icons-material";
 import { PlusIcon } from "@heroicons/react/20/solid";
 import { useEffect, useState } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { IngredientLocal } from "@/app/lib/ingredients/definitions";
-
-const mapIngredientToRecipe = (
-  ingredients: IngredientLocal[],
-  recipes: RecipeLocal[]
-): RecipeWithIngredient[] => {
-  return recipes.map((r) => {
-    return {
-      ...r,
-      ingredient1: ingredients.find((i) => i.name === r.ingredient1),
-      ingredient2: ingredients.find((i) => i.name === r.ingredient2),
-      ingredient3: ingredients.find((i) => i.name === r.ingredient3),
-      ingredient4: ingredients.find((i) => i.name === r.ingredient4),
-      ingredient5: ingredients.find((i) => i.name === r.ingredient5),
-    };
-  });
-};
 
 export default function ActiveRecipeChart() {
   const { recipes, ingredients } = useAppSelector((state) => state.rootState);
@@ -122,26 +106,7 @@ export default function ActiveRecipeChart() {
 
 const RecipeRecord = ({ recipe }: { recipe: RecipeWithIngredient }) => {
   const dispatch = useAppDispatch();
-  const { ingredient1, ingredient2, ingredient3, ingredient4, ingredient5 } =
-    recipe;
-  const ingredient1Price = ingredient1?.price ?? 0;
-  const ingredient2Price = ingredient2?.price ?? 0;
-  const ingredient3Price = ingredient3?.price ?? 0;
-  const ingredient4Price = ingredient4?.price ?? 0;
-  const ingredient5Price = ingredient5?.price ?? 0;
-  const profit =
-    ingredient1Price < 0 ||
-    ingredient2Price < 0 ||
-    ingredient3Price < 0 ||
-    ingredient4Price < 0 ||
-    ingredient5Price < 0
-      ? "?"
-      : recipe.price -
-        ingredient1Price -
-        ingredient2Price -
-        ingredient3Price -
-        ingredient4Price -
-        ingredient5Price;
+  const profit = calculateProfit(recipe);
   return (
     <div
       key={recipe.id}

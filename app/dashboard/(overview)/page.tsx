@@ -4,6 +4,7 @@ import { RevenueChartSkeleton } from "@/app/ui/skeletons";
 import ActiveIngredientChart from "@/app/ui/dashboard/active-ingredient-chart";
 import IngredientTable from "@/app/ui/dashboard/ingredient-table";
 import ActiveRecipeChart from "@/app/ui/dashboard/active-recipes-chart";
+import MegaTable from "@/app/ui/dashboard/megatable";
 
 export default async function Page() {
   return (
@@ -20,9 +21,9 @@ export default async function Page() {
         </Suspense>
         <IngredientTable />
       </div>
-      {/* <div className="mt-6 w-100">
-        <MegaTable recipeData={recipeData} />
-      </div> */}
+      <div className="mt-6 w-100">
+        <MegaTable />
+      </div>
       {/* <Suspense fallback={<CardsSkeleton />}>
         <CardWrapper />
       </Suspense> */}

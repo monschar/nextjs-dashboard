@@ -71,7 +71,7 @@ export default function IngredientTable({}) {
   };
   return (
     <DataGrid
-      sx={{ height: "60vh", width: "100%" }}
+      sx={{ height: "80vh", width: "100%" }}
       rows={ingredients}
       columns={columns}
       columnVisibilityModel={{ id: false, imageUrl: false, sequence: false }}
