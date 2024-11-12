@@ -58,6 +58,14 @@ const columns: GridColDef[] = [
     align: "left",
     editable: true,
   },
+  {
+    field: "deliverable",
+    headerName: "Deliverable",
+    type: "boolean",
+    flex: 0.5,
+    headerAlign: "left",
+    align: "left",
+  },
 ];
 
 const paginationModel = { page: 0, pageSize: 100 };
@@ -74,7 +82,12 @@ export default function IngredientTable({}) {
       sx={{ height: "80vh", width: "100%" }}
       rows={ingredients}
       columns={columns}
-      columnVisibilityModel={{ id: false, imageUrl: false, sequence: false }}
+      columnVisibilityModel={{
+        id: false,
+        imageUrl: false,
+        sequence: false,
+        itemLevel: false,
+      }}
       initialState={{
         sorting: {
           sortModel: [{ field: "name", sort: "asc" }],

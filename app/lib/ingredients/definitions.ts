@@ -7,6 +7,7 @@ export type Ingredient = {
   imageUrl: string;
   sequence: number;
   itemLevel: ItemLevels | undefined;
+  deliverable: boolean;
 };
 
 export type IngredientData = {
@@ -16,6 +17,7 @@ export type IngredientData = {
   imageUrl: string;
   sequence: number;
   itemLevel: ItemLevels;
+  deliverable: boolean;
 };
 
 export type IngredientLocal = IngredientData & {
@@ -31,4 +33,5 @@ export type IngredientForm = {
   imageUrl: string;
   sequence: number;
   itemLevel: ItemLevels | undefined;
+  deliverable: boolean;
 };

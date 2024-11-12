@@ -91,6 +91,7 @@ const initialState: IngredientsState = {
     imageUrl: "",
     sequence: -1,
     itemLevel: undefined,
+    deliverable: false,
   },
 };
 

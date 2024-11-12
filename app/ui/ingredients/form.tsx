@@ -10,7 +10,14 @@ import {
   updateIngredient,
   createIngredient,
 } from "@/lib/slices/ingredientsSlice";
-import { Autocomplete, InputAdornment, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  FormControlLabel,
+  InputAdornment,
+  Radio,
+  RadioGroup,
+  TextField,
+} from "@mui/material";
 import {
   Abc,
   AttachMoney,
@@ -27,6 +34,7 @@ const formatIngredient = (currentIngredient: Ingredient): Ingredient => ({
   imageUrl: currentIngredient.imageUrl,
   itemLevel: currentIngredient.itemLevel,
   sequence: currentIngredient.sequence,
+  deliverable: currentIngredient.deliverable,
 });
 
 export default function IngredientForm({
@@ -180,6 +188,34 @@ export default function IngredientForm({
                   },
                 }}
               />
+            </div>
+          </div>
+        </div>
+
+        <div className="mb-4">
+          <label className="mb-2 block text-sm font-medium">Deliverable</label>
+          <div className="relative mt-2 rounded-md">
+            <div className="relative">
+              <RadioGroup
+                row
+                aria-labelledby="demo-controlled-radio-buttons-group"
+                name="controlled-radio-buttons-group"
+                value={currentIngredient.deliverable}
+                onChange={(event) =>
+                  onChange("deliverable", event?.target.value)
+                }
+              >
+                <FormControlLabel
+                  value={true}
+                  control={<Radio />}
+                  label="Yes"
+                />
+                <FormControlLabel
+                  value={false}
+                  control={<Radio />}
+                  label="No"
+                />
+              </RadioGroup>
             </div>
           </div>
         </div>

@@ -10,7 +10,8 @@ export async function fetchIngredientById(id: string) {
           price,
           image_url as "imageUrl",
           sequence,
-          item_level as "itemLevel"
+          item_level as "itemLevel",
+          deliverable
         FROM ingredients
         WHERE ingredients.id = ${id};
       `;
@@ -33,7 +34,8 @@ export async function fetchAllIngredients() {
           price,
           image_url as "imageUrl",
           sequence,
-          item_level as "itemLevel"
+          item_level as "itemLevel",
+          deliverable
       FROM ingredients
       ORDER BY ingredients.name ASC
     `;
