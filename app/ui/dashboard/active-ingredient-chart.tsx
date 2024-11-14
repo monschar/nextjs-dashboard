@@ -4,6 +4,7 @@ import Image from "next/image";
 import { getActiveIngredients } from "@/app/lib/utils";
 import clsx from "clsx";
 import { useAppSelector } from "@/lib/hooks";
+import { LocalShipping } from "@mui/icons-material";
 
 // This component is representational only.
 // For data visualization UI, check out:
@@ -25,7 +26,7 @@ export default function ActiveIngredientChart() {
           {activeIngredients.map((i) => (
             <div key={i.id} className={clsx("flex flex-1 items-center gap-2")}>
               <div
-                className={clsx("flex w-40 gap-2", {
+                className={clsx("flex w-40 gap-2 items-center", {
                   "bg-rose-100": i.stock < i.frequency * 5,
                 })}
               >
@@ -44,14 +45,18 @@ export default function ActiveIngredientChart() {
                 </p>
               </div>
               <div
-                className="w-full rounded-md bg-blue-300"
+                className="w-full rounded-md bg-blue-300 pl-2 flex items-center"
                 style={{
                   width: `calc((100% - 12rem) * ${
                     i.frequency / activeIngredients[0].frequency
                   })`,
                   height: `${rowHeight * 0.8}px`,
                 }}
-              ></div>
+              >
+                {i.deliverable && (
+                  <LocalShipping className="text-gray-500" fontSize="small" />
+                )}
+              </div>
               <p className="text-sm text-wrap">{i.frequency}</p>
             </div>
           ))}

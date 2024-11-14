@@ -38,13 +38,19 @@ const columns: GridColDef[] = [
     ),
   },
   {
+    field: "recipeStructure",
+    headerName: "Structure",
+    type: "string",
+    flex: 1,
+  },
+  {
     field: "price",
     headerName: "Price",
     type: "number",
     valueFormatter: (value) => {
       return formatCurrency(value);
     },
-    flex: 1,
+    flex: 0.8,
     headerAlign: "left",
     align: "left",
   },
@@ -55,51 +61,116 @@ const columns: GridColDef[] = [
     valueFormatter: (value) => {
       return formatCurrency(value);
     },
-    flex: 1,
+    flex: 0.8,
     headerAlign: "left",
     align: "left",
   },
-  { field: "recipeType", headerName: "Recipe Type", type: "string" },
   {
     field: "ingredient1",
     headerName: "Ingredient1",
-    valueGetter: (value: IngredientLocal) => {
-      return value?.name ?? "-";
-    },
+    renderCell: (
+      params: GridRenderCellParams<GridValidRowModel, IngredientLocal>
+    ) => (
+      <div className="flex items-center gap-3">
+        {params.value?.imageUrl && (
+          <Image
+            src={params.value?.imageUrl}
+            height={25}
+            width={25}
+            alt={`${params.value?.name}'s icon`}
+            style={{ objectFit: "contain", width: "25px", height: "25px" }}
+          />
+        )}
+        {params.value?.name ?? "-"}
+      </div>
+    ),
     flex: 1,
   },
   {
     field: "ingredient2",
     headerName: "Ingredient2",
-    valueGetter: (value: IngredientLocal) => {
-      return value?.name ?? "-";
-    },
+    renderCell: (
+      params: GridRenderCellParams<GridValidRowModel, IngredientLocal>
+    ) => (
+      <div className="flex items-center gap-3">
+        {params.value?.imageUrl && (
+          <Image
+            src={params.value?.imageUrl}
+            height={25}
+            width={25}
+            alt={`${params.value?.name}'s icon`}
+            style={{ objectFit: "contain", width: "25px", height: "25px" }}
+          />
+        )}
+        {params.value?.name ?? "-"}
+      </div>
+    ),
     flex: 1,
   },
   {
     field: "ingredient3",
     headerName: "Ingredient3",
-    valueGetter: (value: IngredientLocal) => {
-      return value?.name ?? "-";
-    },
+    renderCell: (
+      params: GridRenderCellParams<GridValidRowModel, IngredientLocal>
+    ) => (
+      <div className="flex items-center gap-3">
+        {params.value?.imageUrl && (
+          <Image
+            src={params.value?.imageUrl}
+            height={25}
+            width={25}
+            alt={`${params.value?.name}'s icon`}
+            style={{ objectFit: "contain", width: "25px", height: "25px" }}
+          />
+        )}
+        {params.value?.name ?? "-"}
+      </div>
+    ),
     flex: 1,
   },
   {
     field: "ingredient4",
     headerName: "Ingredient4",
-    valueGetter: (value: IngredientLocal) => {
-      return value?.name ?? "-";
-    },
+    renderCell: (
+      params: GridRenderCellParams<GridValidRowModel, IngredientLocal>
+    ) => (
+      <div className="flex items-center gap-3">
+        {params.value?.imageUrl && (
+          <Image
+            src={params.value?.imageUrl}
+            height={25}
+            width={25}
+            alt={`${params.value?.name}'s icon`}
+            style={{ objectFit: "contain", width: "25px", height: "25px" }}
+          />
+        )}
+        {params.value?.name ?? "-"}
+      </div>
+    ),
     flex: 1,
   },
   {
     field: "ingredient5",
     headerName: "Ingredient5",
-    valueGetter: (value: IngredientLocal) => {
-      return value?.name ?? "-";
-    },
+    renderCell: (
+      params: GridRenderCellParams<GridValidRowModel, IngredientLocal>
+    ) => (
+      <div className="flex items-center gap-3">
+        {params.value?.imageUrl && (
+          <Image
+            src={params.value?.imageUrl}
+            height={25}
+            width={25}
+            alt={`${params.value?.name}'s icon`}
+            style={{ objectFit: "contain", width: "25px", height: "25px" }}
+          />
+        )}
+        {params.value?.name ?? "-"}
+      </div>
+    ),
     flex: 1,
   },
+  { field: "deliverable", headerName: "deliverable", type: "boolean" },
 ];
 
 const paginationModel = { page: 0, pageSize: 50 };
@@ -117,6 +188,12 @@ export default function MegaTable() {
   const tableData = mappedRecipes.map((r) => ({
     ...r,
     profit: calculateProfit(r),
+    deliverable:
+      (r.ingredient1?.deliverable ?? true) &&
+      (r.ingredient2?.deliverable ?? true) &&
+      (r.ingredient3?.deliverable ?? true) &&
+      (r.ingredient4?.deliverable ?? true) &&
+      (r.ingredient5?.deliverable ?? true),
   }));
   return (
     <DataGrid
